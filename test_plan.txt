@@ -1,0 +1,255 @@
+================================================================================
+                    TEST PLAN FOR HABR.COM WEBPAGE
+                    URL: https://habr.com
+================================================================================
+
+This test plan contains UI test cases designed for automated UI testing.
+Each test case is atomic and independent, with no overlapping steps between cases.
+
+================================================================================
+TEST CASE 1: VERIFY MAIN PAGE ELEMENTS
+================================================================================
+
+OBJECTIVE:
+Verify that all main page elements are present and displayed correctly on the main page.
+
+TEST STEPS:
+1. Navigate to the main page URL (https://habr.com)
+2. Verify the header element exists:
+   - Locate and verify a div element with class "tm-header__container" is present
+   - Verify the header is visible and displayed on the page
+3. Verify all content tabs are present and displayed:
+   - Locate and verify the "Статьи" (Articles) tab is present and visible
+   - Locate and verify the "Посты" (Posts) tab is present and visible
+   - Locate and verify the "Новости" (News) tab is present and visible
+   - Locate and verify the "Хабы" (Hubs) tab is present and visible
+   - Locate and verify the "Авторы" (Authors) tab is present and visible
+   - Locate and verify the "Компании" (Companies) tab is present and visible
+4. Verify other significant main page elements:
+   - Verify the "Хабр" logo link is present and visible
+   - Verify the "Все потоки" (All Streams) link is present and visible
+   - Verify the "Поиск" (Search) link is present and visible
+   - Verify the "Написать публикацию" (Write Publication) link is present and visible
+   - Verify the "Настройки" (Settings) button is present and visible
+   - Verify the "Войти" (Login) button is present and visible
+   - Verify the main content area is present and visible
+   - Verify the footer section is present and visible
+
+EXPECTED RESULTS:
+- All main page elements listed above are present on the page
+- All elements are visible and displayed correctly
+- Header element with class "tm-header__container" is found and displayed
+- All content tabs ("Статьи", "Посты", "Новости", "Хабы", "Авторы", "Компании") are present and visible
+- All other significant main page elements are present and visible
+- No critical elements are missing from the page
+
+================================================================================
+TEST CASE 2: VERIFY MAIN MENU FUNCTIONALITY
+================================================================================
+
+OBJECTIVE:
+Verify the main menu can be opened and closed, and all menu options are displayed and clickable.
+
+TEST STEPS:
+1. Navigate to the main page URL (https://habr.com)
+2. Verify the menu button exists:
+   - Locate the menu button element using XPath "//*[@id="app"]/div/header/div/div/button"
+   - Verify the button is present and visible
+   - Verify the button is clickable
+3. Open the menu:
+   - Click on the menu button element
+   - Wait for the menu to open
+   - Verify the menu panel is displayed and visible
+4. Verify main menu options are displayed:
+   - Verify the "Что нового" (What's New) option is present and visible
+   - Verify the "Что нового" option is clickable
+   - Verify the "Бэкенд" (Backend) option is present and visible
+   - Verify the "Бэкенд" option is clickable
+   - Verify the "Фронтенд" (Frontend) option is present and visible
+   - Verify the "Фронтенд" option is clickable
+   - Verify the "Администрирование" (Administration) option is present and visible
+   - Verify the "Администрирование" option is clickable
+   - Verify the "Дизайн" (Design) option is present and visible
+   - Verify the "Дизайн" option is clickable
+   - Verify the "Менеджмент" (Management) option is present and visible
+   - Verify the "Менеджмент" option is clickable
+   - Verify the "Маркетинг и контент" (Marketing and content) option is present and visible
+   - Verify the "Маркетинг и контент" option is clickable
+   - Verify the "Научпоп" (Science popularization) option is present and visible
+   - Verify the "Научпоп" option is clickable
+   - Verify the "Разработка" (Development) option is present and visible
+   - Verify the "Разработка" option is clickable
+   - Verify the "Все потоки" (All streams) option is present and visible
+   - Verify the "Все потоки" option is clickable
+5. Verify "Все сервисы Хабра" (All Habr services) section:
+   - Verify the "Все сервисы Хабра" section header is present and visible
+   - Verify the "Хабр" (Habr) service link is present and visible
+   - Verify the "Хабр" service link is clickable
+   - Verify the "Q&A" service link is present and visible
+   - Verify the "Q&A" service link is clickable
+   - Verify the "Карьера" (Career) service link is present and visible
+   - Verify the "Карьера" service link is clickable
+   - Verify the "Курсы" (Courses) service link is present and visible
+   - Verify the "Курсы" service link is clickable
+6. Verify menu options functionality:
+   - Verify all menu options are properly displayed in the menu
+   - Verify the menu structure is correct
+   - Verify menu options with arrows (">") are displayed correctly
+   - Verify menu options without arrows are displayed correctly
+7. Close the menu:
+   - Click on the menu button element again
+   - Wait for the menu to close
+   - Verify the menu panel is no longer displayed or is hidden
+
+EXPECTED RESULTS:
+- Menu button element with XPath "//*[@id="app"]/div/header/div/div/button" is present, visible, and clickable
+- Menu opens successfully when the button is clicked
+- All main menu options are present and visible:
+  * "Что нового" (What's New)
+  * "Бэкенд" (Backend)
+  * "Фронтенд" (Frontend)
+  * "Администрирование" (Administration)
+  * "Дизайн" (Design)
+  * "Менеджмент" (Management)
+  * "Маркетинг и контент" (Marketing and content)
+  * "Научпоп" (Science popularization)
+  * "Разработка" (Development)
+  * "Все потоки" (All streams)
+- All menu options are clickable
+- "Все сервисы Хабра" section is present and visible with all service links:
+  * "Хабр" (Habr)
+  * "Q&A"
+  * "Карьера" (Career)
+  * "Курсы" (Courses)
+- All service links are clickable
+- Menu closes successfully when the button is clicked again
+- Menu functionality works correctly (open/close)
+
+================================================================================
+TEST CASE 3: VERIFY FOOTER FUNCTIONALITY
+================================================================================
+
+OBJECTIVE:
+Verify that the footer section is present and displayed correctly, and all footer links are visible and clickable.
+
+TEST STEPS:
+1. Navigate to the main page URL (https://habr.com)
+2. Scroll to the bottom of the page:
+   - Scroll down to ensure the footer section is visible
+   - Verify the footer section is present on the page
+3. Verify the footer element exists:
+   - Locate and verify the footer element is present
+   - Verify the footer is visible and displayed on the page
+4. Verify footer sections are displayed:
+   - Verify the "О проекте" (About Project) section is present and visible
+   - Verify the "Сервисы" (Services) section is present and visible
+   - Verify the "Информация" (Information) section is present and visible
+   - Verify the "Социальные сети" (Social Networks) section is present and visible
+   - Verify footer content is properly structured
+5. Verify footer links in "О проекте" section:
+   - Verify the "Устройство сайта" (Site Structure) link is present and clickable
+   - Verify the "Для авторов" (For Authors) link is present and clickable
+   - Verify the "Для компаний" (For Companies) link is present and clickable
+   - Verify the "Документы" (Documents) link is present and clickable
+   - Verify the "Соглашение" (Agreement) link is present and clickable
+   - Verify the "Конфиденциальность" (Privacy) link is present and clickable
+6. Verify footer links in "Сервисы" section:
+   - Verify the "Корпоративный блог" (Corporate Blog) link is present and clickable
+   - Verify the "Медийная реклама" (Media Advertising) link is present and clickable
+   - Verify the "Нативные проекты" (Native Projects) link is present and clickable
+   - Verify the "Образовательные программы" (Educational Programs) link is present and clickable
+   - Verify the "Стартапам" (For Startups) link is present and clickable
+7. Verify footer links in "Информация" section:
+   - Verify the "Помощь" (Help) link is present and clickable
+   - Verify the "Контакты" (Contacts) link is present and clickable
+   - Verify the "Реклама" (Advertising) link is present and clickable
+   - Verify the "Вакансии" (Jobs) link is present and clickable
+8. Verify footer links in "Социальные сети" section:
+   - Verify the "Twitter" link is present and clickable
+   - Verify the "Facebook" link is present and clickable
+   - Verify the "VK" link is present and clickable
+   - Verify the "Telegram" link is present and clickable
+9. Verify footer information is displayed:
+   - Verify copyright or company information is present and visible
+   - Verify the "Хабр" (Habr) company name is present and visible
+   - Verify footer text is readable and properly formatted
+10. Verify footer responsiveness:
+   - Verify the footer displays correctly at the bottom of the page
+   - Verify the footer is accessible and visible
+
+EXPECTED RESULTS:
+- Footer section is present and visible on the page
+- Footer element is found and displayed correctly
+- All footer sections ("О проекте", "Сервисы", "Информация", "Социальные сети") are present and visible
+- All footer links in "О проекте" section are present, visible, and clickable
+- All footer links in "Сервисы" section are present, visible, and clickable
+- All footer links in "Информация" section are present, visible, and clickable
+- All footer links in "Социальные сети" section are present, visible, and clickable
+- Footer information (copyright, company name) is displayed correctly
+- Footer is properly positioned at the bottom of the page
+- All footer sections and subsections are properly structured and displayed
+
+================================================================================
+TEST CASE 4: VERIFY AUTHORIZATION BUTTON FUNCTIONALITY
+================================================================================
+
+OBJECTIVE:
+Verify that clicking the "Войти" (Login) button opens the login window and all required elements are displayed.
+
+TEST STEPS:
+1. Navigate to the main page URL (https://habr.com)
+2. Locate the "Войти" (Login) button:
+   - Find the "Войти" button in the header area
+   - Verify the button is present and visible
+   - Verify the button is clickable
+3. Click the "Войти" button:
+   - Click on the "Войти" button
+   - Wait for the login window/modal to appear
+4. Verify the login window is displayed:
+   - Verify a login window, modal, or page is opened
+   - Verify the login window is visible on the screen
+5. Verify login form fields are displayed:
+   - Verify the "Email" input field is present and visible
+   - Verify the "Email" field is enabled and can receive input
+   - Verify the "Пароль" (Password) input field is present and visible
+   - Verify the "Пароль" field is enabled and can receive input
+6. Verify login form buttons are displayed:
+   - Verify the "Войти" (Login) submit button is present and visible
+   - Verify the "Войти" button is clickable
+   - Verify the "Забыли пароль?" (Forgot Password?) link is present and visible
+   - Verify the "Забыли пароль?" link is clickable
+7. Verify social login options are displayed:
+   - Verify the text "Или войдите с помощью других сервисов" (Or login using other services) is present
+   - Verify the "Войти с помощью GitHub" button is present and visible
+   - Verify the "Войти с помощью VK" button is present and visible
+   - Verify the "Войти с помощью Google" button is present and visible
+   - Verify the "Войти с помощью Facebook" button is present and visible
+   - Verify the "Войти с помощью Twitter" button is present and visible
+   - Verify the "Войти с помощью Yandex" button is present and visible
+8. Verify registration link is displayed:
+   - Verify the "Ещё нет аккаунта?" (Don't have an account yet?) text is present
+   - Verify the "Зарегистрируйтесь" (Register) link is present and visible
+   - Verify the "Зарегистрируйтесь" link is clickable
+
+EXPECTED RESULTS:
+- "Войти" button is present, visible, and clickable
+- Login window opens successfully after clicking the button
+- All login form fields (Email and Password) are present and visible
+- All login form buttons and links are present, visible, and clickable
+- All social login buttons are present and visible
+- Registration link is present and visible
+- All elements on the login page are displayed correctly
+
+================================================================================
+END OF TEST PLAN
+================================================================================
+
+Notes:
+- Each test case is independent and can be executed separately
+- Test steps within each test case are sequential and should be executed in order
+- All test cases assume the page is loaded and accessible
+- Test cases should be executed in a clean state (no previous user session required)
+- Test results should be documented for each test case execution
+
+
+
