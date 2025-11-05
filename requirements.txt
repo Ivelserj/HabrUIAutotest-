@@ -1,0 +1,15 @@
+# Playwright
+playwright==1.40.0
+
+# Pytest
+pytest==7.4.3
+pytest-playwright==0.4.3
+pytest-html==4.1.1
+pytest-xdist==3.5.0
+
+# Allure reporting
+allure-pytest==2.13.2
+
+# Additional utilities
+python-dotenv==1.0.0
+
