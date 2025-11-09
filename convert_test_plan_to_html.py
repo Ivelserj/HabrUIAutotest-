@@ -75,20 +75,55 @@ def parse_test_plan(file_path):
         if current_step:
             steps.append(current_step)
         
-        # Parse expected results into list items
+        # Parse expected results into hierarchical structure
         expected_items = []
         if expected_raw:
             expected_lines = expected_raw.split('\n')
+            current_main_item = None
+            
             for line in expected_lines:
-                line = line.strip()
-                if line:
-                    # Skip separator lines (lines with only =, -, or _ characters)
-                    if re.match(r'^[=_-]+$', line):
-                        continue
-                    # Remove leading - or * if present
-                    cleaned = re.sub(r'^[-*]\s*', '', line)
-                    if cleaned and not re.match(r'^[=_-]+$', cleaned):
-                        expected_items.append(cleaned)
+                original_line = line
+                stripped = line.strip()
+                
+                if not stripped:
+                    continue
+                
+                # Skip separator lines (lines with only =, -, or _ characters)
+                if re.match(r'^[=_-]+$', stripped):
+                    continue
+                
+                # Check if it's a main item (starts with - at the beginning or after whitespace)
+                main_match = re.match(r'^[-]\s*(.+)$', stripped)
+                if main_match:
+                    # Save previous main item if exists
+                    if current_main_item:
+                        expected_items.append(current_main_item)
+                    # Create new main item
+                    current_main_item = {
+                        'text': main_match.group(1).strip(),
+                        'subitems': []
+                    }
+                # Check if it's a sub-item (starts with * and has indentation or is after a main item)
+                elif stripped.startswith('*') and current_main_item:
+                    # Remove leading * and spaces
+                    subitem_text = re.sub(r'^\*\s*', '', stripped)
+                    if subitem_text:
+                        current_main_item['subitems'].append(subitem_text)
+                # If it's a line that doesn't start with - or *, it might be continuation
+                elif current_main_item and not stripped.startswith('-') and not stripped.startswith('*'):
+                    # This might be continuation of previous item, but we'll treat it as a new main item
+                    # Save previous main item
+                    if current_main_item:
+                        expected_items.append(current_main_item)
+                    # Create new main item without marker
+                    current_main_item = {
+                        'text': stripped,
+                        'subitems': []
+                    }
+            
+            # Add last main item
+            if current_main_item:
+                expected_items.append(current_main_item)
         
         test_cases.append({
             'number': case_num,
@@ -398,9 +433,23 @@ def generate_html(data):
         if isinstance(tc['expected'], list) and tc['expected']:
             html += '                    <ul>\n'
             for item in tc['expected']:
-                # Escape HTML special characters
-                escaped_item = item.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-                html += f'                        <li>{escaped_item}</li>\n'
+                # Check if item is a dictionary (hierarchical structure) or a string
+                if isinstance(item, dict) and 'text' in item:
+                    # Main item with subitems
+                    escaped_text = item['text'].replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+                    html += f'                        <li>{escaped_text}'
+                    # Add subitems if they exist
+                    if item.get('subitems'):
+                        html += '\n                            <ul class="substeps">\n'
+                        for subitem in item['subitems']:
+                            escaped_subitem = subitem.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+                            html += f'                                <li>{escaped_subitem}</li>\n'
+                        html += '                            </ul>'
+                    html += '</li>\n'
+                else:
+                    # Simple string item (fallback for old format)
+                    escaped_item = str(item).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+                    html += f'                        <li>{escaped_item}</li>\n'
             html += '                    </ul>\n'
         elif tc['expected']:
             # Fallback for string format

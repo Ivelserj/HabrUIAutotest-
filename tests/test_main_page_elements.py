@@ -26,6 +26,7 @@ class TestMainPageElements:
     )
     @allure.severity(allure.severity_level.CRITICAL)
     @allure.tag("main_page", "elements", "smoke")
+    @pytest.mark.smoke
     def test_verify_main_page_elements(self, main_page_steps: MainPageSteps):
         """
         Test to verify all main page elements are present and visible
