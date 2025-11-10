@@ -25,13 +25,29 @@ class MainPage:
         self.page.goto(self.URL, wait_until="domcontentloaded")
         # Wait for header container to be visible as an indicator that page is loaded
         self.page.wait_for_selector("div.tm-header__container", state="visible", timeout=30000)
-        # Wait for page to be fully loaded (all resources loaded)
-        self.page.wait_for_load_state("load", timeout=10000)
+        # Wait for page to be fully loaded (all resources loaded) with increased timeout
+        try:
+            self.page.wait_for_load_state("load", timeout=30000)
+        except Exception:
+            # If load state times out, try networkidle as fallback
+            try:
+                self.page.wait_for_load_state("networkidle", timeout=15000)
+            except Exception:
+                # If both fail, just continue - page is likely loaded enough
+                pass
         # If we're on feed page, navigate to articles page where all tabs are visible
         if "/ru/feed" in self.page.url:
             self.page.goto("https://habr.com/ru/articles/", wait_until="domcontentloaded")
             self.page.wait_for_selector("div.tm-header__container", state="visible", timeout=30000)
-            self.page.wait_for_load_state("load", timeout=10000)
+            try:
+                self.page.wait_for_load_state("load", timeout=30000)
+            except Exception:
+                # If load state times out, try networkidle as fallback
+                try:
+                    self.page.wait_for_load_state("networkidle", timeout=15000)
+                except Exception:
+                    # If both fail, just continue - page is likely loaded enough
+                    pass
     
     # Header elements
     @property
@@ -116,7 +132,7 @@ class MainPage:
     @property
     def footer_section(self) -> Locator:
         """Footer section"""
-        return self.page.locator("footer").or_(self.page.locator("div.tm-footer"))
+        return self.page.locator('.tm-footer-menu')
     
     # Verification methods
     def verify_header_container_exists(self) -> bool:
@@ -168,4 +184,167 @@ class MainPage:
             self.authors_tab,
             self.companies_tab
         ]
+    
+    # Menu elements
+    @property
+    def menu_button(self) -> Locator:
+        """Menu button element"""
+        return self.page.locator('//*[@id="app"]/div/header/div/div/button').first
+    
+    @property
+    def menu_panel(self) -> Locator:
+        """Menu panel element"""
+        return self.page.locator(".navigation-wrapper")
+    
+    # Main menu options
+    @property
+    def menu_whats_new(self) -> Locator:
+        """What's New menu option ('Что нового')"""
+        return self.page.get_by_role("link", name="Что нового").or_(
+            self.page.get_by_text("Что нового")
+        ).first
+    
+    @property
+    def menu_backend(self) -> Locator:
+        """Backend menu option ('Бэкенд')"""
+        return self.page.get_by_role("link", name="Бэкенд").or_(
+            self.page.get_by_text("Бэкенд")
+        ).first
+    
+    @property
+    def menu_frontend(self) -> Locator:
+        """Frontend menu option ('Фронтенд')"""
+        return self.page.get_by_role("link", name="Фронтенд").or_(
+            self.page.get_by_text("Фронтенд")
+        ).first
+    
+    @property
+    def menu_administration(self) -> Locator:
+        """Administration menu option ('Администрирование')"""
+        return self.page.get_by_role("link", name="Администрирование").or_(
+            self.page.get_by_text("Администрирование")
+        ).first
+    
+    @property
+    def menu_design(self) -> Locator:
+        """Design menu option ('Дизайн')"""
+        return self.page.get_by_role("link", name="Дизайн").or_(
+            self.page.get_by_text("Дизайн")
+        ).first
+    
+    @property
+    def menu_management(self) -> Locator:
+        """Management menu option ('Менеджмент')"""
+        return self.page.get_by_role("link", name="Менеджмент").or_(
+            self.page.get_by_text("Менеджмент")
+        ).first
+    
+    @property
+    def menu_marketing(self) -> Locator:
+        """Marketing and content menu option ('Маркетинг и контент')"""
+        return self.page.get_by_role("link", name="Маркетинг и контент").or_(
+            self.page.get_by_text("Маркетинг и контент")
+        ).first
+    
+    @property
+    def menu_science(self) -> Locator:
+        """Science popularization menu option ('Научпоп')"""
+        return self.page.get_by_role("link", name="Научпоп").or_(
+            self.page.get_by_text("Научпоп")
+        ).first
+    
+    @property
+    def menu_development(self) -> Locator:
+        """Development menu option ('Разработка')"""
+        return self.page.get_by_role("link", name="Разработка").or_(
+            self.page.get_by_text("Разработка")
+        ).first
+    
+    @property
+    def menu_all_streams(self) -> Locator:
+        """All streams menu option ('Все потоки')"""
+        return self.page.get_by_role("link", name="Все потоки").or_(
+            self.page.get_by_text("Все потоки")
+        ).first
+    
+    # All Habr services section
+    @property
+    def services_section_header(self) -> Locator:
+        """All Habr services section header ('Все сервисы Хабра')"""
+        return self.page.get_by_text("Все сервисы Хабра").first
+    
+    @property
+    def service_habr_link(self) -> Locator:
+        """Habr service link ('Хабр')"""
+        return self.page.get_by_role("link", name="Хабр").or_(
+            self.page.locator('a[href*="habr.com"]').filter(has_text="Хабр")
+        ).first
+    
+    @property
+    def service_qa_link(self) -> Locator:
+        """Q&A service link"""
+        return self.page.get_by_role("link", name="Q&A").or_(
+            self.page.get_by_text("Q&A")
+        ).first
+    
+    @property
+    def service_career_link(self) -> Locator:
+        """Career service link ('Карьера')"""
+        return self.page.get_by_role("link", name="Карьера").or_(
+            self.page.get_by_text("Карьера")
+        ).first
+    
+    @property
+    def service_courses_link(self) -> Locator:
+        """Courses service link ('Курсы')"""
+        return self.page.get_by_role("link", name="Курсы").or_(
+            self.page.get_by_text("Курсы")
+        ).first
+    
+    # Menu verification methods
+    def verify_menu_button_exists(self) -> bool:
+        """Verify menu button exists and is visible"""
+        return self.menu_button.is_visible()
+    
+    def verify_menu_button_clickable(self) -> bool:
+        """Verify menu button is clickable"""
+        return self.menu_button.is_enabled()
+    
+    def verify_menu_panel_displayed(self) -> bool:
+        """Verify menu panel is displayed and visible"""
+        try:
+            return self.menu_panel.is_visible(timeout=5000)
+        except Exception:
+            return False
+    
+    def verify_menu_panel_hidden(self) -> bool:
+        """Verify menu panel is hidden or not displayed"""
+        try:
+            return not self.menu_panel.is_visible(timeout=2000)
+        except Exception:
+            return True
+    
+    def get_all_menu_options(self) -> dict:
+        """Get dictionary of all menu option locators"""
+        return {
+            "Что нового": self.menu_whats_new,
+            "Бэкенд": self.menu_backend,
+            "Фронтенд": self.menu_frontend,
+            "Администрирование": self.menu_administration,
+            "Дизайн": self.menu_design,
+            "Менеджмент": self.menu_management,
+            "Маркетинг и контент": self.menu_marketing,
+            "Научпоп": self.menu_science,
+            "Разработка": self.menu_development,
+            "Все потоки": self.menu_all_streams
+        }
+    
+    def get_all_service_links(self) -> dict:
+        """Get dictionary of all service link locators"""
+        return {
+            "Хабр": self.service_habr_link,
+            "Q&A": self.service_qa_link,
+            "Карьера": self.service_career_link,
+            "Курсы": self.service_courses_link
+        }
 

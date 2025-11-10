@@ -136,3 +136,212 @@ class TestMainPageElements:
                 attachment_type=allure.attachment_type.TEXT
             )
 
+
+@allure.epic("Habr.com UI Tests")
+@allure.feature("Main Menu Functionality")
+@allure.story("TEST CASE 2: Verify Main Menu Functionality")
+class TestMainMenuFunctionality:
+    """Test class for verifying main menu functionality"""
+    
+    @allure.title("Verify main menu can be opened and closed, and all menu options are displayed and clickable")
+    @allure.description(
+        "This test verifies the main menu functionality on the main page.\n"
+        "It checks:\n"
+        "- Menu button exists and is clickable\n"
+        "- Menu opens successfully\n"
+        "- All main menu options are displayed and clickable\n"
+        "- 'Все сервисы Хабра' section is displayed with all service links\n"
+        "- Menu closes successfully"
+    )
+    @allure.severity(allure.severity_level.CRITICAL)
+    @allure.tag("main_page", "menu", "smoke")
+    @pytest.mark.smoke
+    def test_verify_main_menu_functionality(self, main_page_steps: MainPageSteps):
+        """
+        Test to verify main menu functionality
+        
+        Args:
+            main_page_steps: MainPageSteps fixture
+        """
+        # Step 1: Navigate to the main page
+        with allure.step("Step 1: Navigate to the main page URL (https://habr.com)"):
+            main_page_steps.navigate_to_main_page()
+        
+        # Step 2: Verify the menu button exists
+        with allure.step("Step 2: Verify the menu button exists"):
+            menu_button_results = main_page_steps.verify_menu_button()
+            assert menu_button_results["exists"], "Menu button should be present and visible"
+            assert menu_button_results["clickable"], "Menu button should be clickable"
+            allure.attach(
+                f"Menu button exists: {menu_button_results['exists']}, "
+                f"clickable: {menu_button_results['clickable']}",
+                name="Menu button verification",
+                attachment_type=allure.attachment_type.TEXT
+            )
+        
+        # Step 3: Open the menu
+        with allure.step("Step 3: Open the menu"):
+            main_page_steps.open_menu()
+            menu_panel_visible = main_page_steps.verify_menu_panel_displayed()
+            assert menu_panel_visible, "Menu panel should be displayed and visible after opening"
+            allure.attach(
+                "Menu opened successfully and menu panel is displayed",
+                name="Menu opened verification",
+                attachment_type=allure.attachment_type.TEXT
+            )
+        
+        # Step 4: Verify main menu options are displayed
+        with allure.step("Step 4: Verify main menu options are displayed"):
+            menu_options_results = main_page_steps.verify_menu_options()
+            
+            expected_menu_options = [
+                "Что нового",
+                "Бэкенд",
+                "Фронтенд",
+                "Администрирование",
+                "Дизайн",
+                "Менеджмент",
+                "Маркетинг и контент",
+                "Научпоп",
+                "Разработка",
+                "Все потоки"
+            ]
+            
+            missing_options = [
+                option for option in expected_menu_options
+                if not menu_options_results.get(option, {}).get("visible", False)
+            ]
+            
+            not_clickable_options = [
+                option for option in expected_menu_options
+                if menu_options_results.get(option, {}).get("visible", False)
+                and not menu_options_results.get(option, {}).get("clickable", False)
+            ]
+            
+            assert len(missing_options) == 0, (
+                f"Some menu options are missing or not visible: {missing_options}. "
+                f"All options should be present: {expected_menu_options}"
+            )
+            
+            assert len(not_clickable_options) == 0, (
+                f"Some menu options are not clickable: {not_clickable_options}. "
+                f"All visible options should be clickable"
+            )
+            
+            options_status = "\n".join([
+                f"- {option}: visible={menu_options_results.get(option, {}).get('visible', False)}, "
+                f"clickable={menu_options_results.get(option, {}).get('clickable', False)}"
+                for option in expected_menu_options
+            ])
+            
+            allure.attach(
+                f"All main menu options verification:\n{options_status}",
+                name="Menu options verification",
+                attachment_type=allure.attachment_type.TEXT
+            )
+        
+        # Step 5: Verify "Все сервисы Хабра" section
+        with allure.step("Step 5: Verify 'Все сервисы Хабра' section"):
+            services_results = main_page_steps.verify_services_section()
+            
+            assert services_results["section_header"], (
+                "'Все сервисы Хабра' section header should be present and visible"
+            )
+            
+            expected_service_links = ["Хабр", "Q&A", "Карьера", "Курсы"]
+            service_links_results = services_results.get("service_links", {})
+            
+            missing_service_links = [
+                link for link in expected_service_links
+                if not service_links_results.get(link, {}).get("visible", False)
+            ]
+            
+            not_clickable_service_links = [
+                link for link in expected_service_links
+                if service_links_results.get(link, {}).get("visible", False)
+                and not service_links_results.get(link, {}).get("clickable", False)
+            ]
+            
+            assert len(missing_service_links) == 0, (
+                f"Some service links are missing or not visible: {missing_service_links}. "
+                f"All service links should be present: {expected_service_links}"
+            )
+            
+            assert len(not_clickable_service_links) == 0, (
+                f"Some service links are not clickable: {not_clickable_service_links}. "
+                f"All visible service links should be clickable"
+            )
+            
+            service_links_status = "\n".join([
+                f"- {link}: visible={service_links_results.get(link, {}).get('visible', False)}, "
+                f"clickable={service_links_results.get(link, {}).get('clickable', False)}"
+                for link in expected_service_links
+            ])
+            
+            allure.attach(
+                f"'Все сервисы Хабра' section verification:\n"
+                f"Section header: {services_results['section_header']}\n"
+                f"Service links:\n{service_links_status}",
+                name="Services section verification",
+                attachment_type=allure.attachment_type.TEXT
+            )
+        
+        # Step 6: Verify menu options functionality
+        with allure.step("Step 6: Verify menu options functionality"):
+            # Verify menu structure is correct
+            all_options_visible = all(
+                menu_options_results.get(option, {}).get("visible", False)
+                for option in expected_menu_options
+            )
+            assert all_options_visible, "All menu options should be properly displayed in the menu"
+            
+            allure.attach(
+                "Menu structure is correct and all menu options are properly displayed",
+                name="Menu structure verification",
+                attachment_type=allure.attachment_type.TEXT
+            )
+        
+        # Step 7: Close the menu
+        with allure.step("Step 7: Close the menu"):
+            main_page_steps.close_menu()
+            menu_panel_hidden = main_page_steps.verify_menu_panel_hidden()
+            assert menu_panel_hidden, "Menu panel should be hidden or not displayed after closing"
+            allure.attach(
+                "Menu closed successfully and menu panel is hidden",
+                name="Menu closed verification",
+                attachment_type=allure.attachment_type.TEXT
+            )
+        
+        # Final assertion: All menu functionality should work correctly
+        with allure.step("Verify all menu functionality works correctly - Final Check"):
+            all_checks = [
+                menu_button_results["exists"],
+                menu_button_results["clickable"],
+                menu_panel_visible,
+                all(menu_options_results.get(option, {}).get("visible", False) 
+                    for option in expected_menu_options),
+                all(menu_options_results.get(option, {}).get("clickable", False) 
+                    for option in expected_menu_options),
+                services_results["section_header"],
+                all(service_links_results.get(link, {}).get("visible", False) 
+                    for link in expected_service_links),
+                all(service_links_results.get(link, {}).get("clickable", False) 
+                    for link in expected_service_links),
+                menu_panel_hidden
+            ]
+            
+            assert all(all_checks), (
+                "Not all menu functionality works correctly. "
+                "Please check the test results above for details."
+            )
+            
+            allure.attach(
+                "✓ All main menu functionality works correctly:\n"
+                "- Menu button exists and is clickable\n"
+                "- Menu opens successfully\n"
+                "- All menu options are displayed and clickable\n"
+                "- 'Все сервисы Хабра' section is displayed with all service links\n"
+                "- Menu closes successfully",
+                name="Final verification result",
+                attachment_type=allure.attachment_type.TEXT
+            )

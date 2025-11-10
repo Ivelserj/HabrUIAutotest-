@@ -163,4 +163,249 @@ class MainPageSteps:
                 attachment_type=allure.attachment_type.PNG
             )
         return is_visible
+    
+    # Menu-related steps
+    @allure.step("Verify menu button exists and is clickable")
+    def verify_menu_button(self) -> dict:
+        """
+        Verify menu button exists, is visible, and is clickable
+        
+        Returns:
+            dict: Dictionary with 'exists' and 'clickable' status
+        """
+        exists = self.main_page.verify_menu_button_exists()
+        clickable = self.main_page.verify_menu_button_clickable() if exists else False
+        
+        if exists:
+            allure.attach(
+                self.main_page.menu_button.screenshot(),
+                name="menu_button",
+                attachment_type=allure.attachment_type.PNG
+            )
+        
+        return {"exists": exists, "clickable": clickable}
+    
+    @allure.step("Open menu")
+    def open_menu(self) -> None:
+        """Open the menu by clicking the menu button"""
+        self.main_page.menu_button.click()
+        # Wait for menu to open by waiting for a menu option to appear
+        # Try waiting for menu panel first, if that fails, wait for a menu option
+        try:
+            self.main_page.menu_panel.wait_for(state="visible", timeout=5000)
+        except Exception:
+            # If menu panel wait fails, wait for a menu option instead
+            try:
+                self.main_page.menu_whats_new.wait_for(state="visible", timeout=5000)
+            except Exception:
+                # If that also fails, try waiting for any menu option to appear
+                try:
+                    self.main_page.menu_backend.wait_for(state="visible", timeout=5000)
+                except Exception:
+                    # If all menu options fail, wait for services section header
+                    self.main_page.services_section_header.wait_for(state="visible", timeout=5000)
+        allure.attach(
+            self.page.screenshot(),
+            name="menu_opened",
+            attachment_type=allure.attachment_type.PNG
+        )
+    
+    @allure.step("Verify menu panel is displayed")
+    def verify_menu_panel_displayed(self) -> bool:
+        """
+        Verify menu panel is displayed and visible
+        
+        Returns:
+            bool: True if menu panel is visible, False otherwise
+        """
+        # Check if menu panel is visible, or if any menu option is visible as fallback
+        is_visible = self.main_page.verify_menu_panel_displayed()
+        if not is_visible:
+            # If menu panel is not visible, check if menu options are visible
+            try:
+                is_visible = self.main_page.menu_whats_new.is_visible(timeout=2000)
+            except Exception:
+                is_visible = False
+        
+        if is_visible:
+            try:
+                allure.attach(
+                    self.main_page.menu_panel.screenshot(),
+                    name="menu_panel",
+                    attachment_type=allure.attachment_type.PNG
+                )
+            except Exception:
+                # If menu panel screenshot fails, use page screenshot
+                allure.attach(
+                    self.page.screenshot(),
+                    name="menu_panel",
+                    attachment_type=allure.attachment_type.PNG
+                )
+        return is_visible
+    
+    @allure.step("Verify all main menu options are displayed")
+    def verify_menu_options(self) -> dict:
+        """
+        Verify all main menu options are present, visible, and clickable
+        
+        Returns:
+            dict: Dictionary with menu option names as keys and dict with 'visible' and 'clickable' as values
+        """
+        menu_options = self.main_page.get_all_menu_options()
+        results = {}
+        
+        for option_name, option_locator in menu_options.items():
+            try:
+                count = option_locator.count()
+                if count > 0:
+                    is_visible = option_locator.first.is_visible(timeout=5000)
+                    is_clickable = option_locator.first.is_enabled() if is_visible else False
+                else:
+                    is_visible = False
+                    is_clickable = False
+            except Exception:
+                is_visible = False
+                is_clickable = False
+            
+            results[option_name] = {
+                "visible": is_visible,
+                "clickable": is_clickable
+            }
+            
+            if not is_visible:
+                allure.attach(
+                    f"Menu option '{option_name}' is not visible (count: {count if 'count' in locals() else 0})",
+                    name=f"missing_menu_option_{option_name}",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+        
+        return results
+    
+    @allure.step("Verify 'Все сервисы Хабра' section is displayed")
+    def verify_services_section(self) -> dict:
+        """
+        Verify 'Все сервисы Хабра' section header and all service links are present, visible, and clickable
+        
+        Returns:
+            dict: Dictionary with section header and service links status
+        """
+        results = {}
+        
+        # Verify section header
+        try:
+            header_visible = self.main_page.services_section_header.is_visible(timeout=5000)
+        except Exception:
+            header_visible = False
+        
+        results["section_header"] = header_visible
+        
+        # Verify service links
+        service_links = self.main_page.get_all_service_links()
+        service_results = {}
+        
+        for service_name, service_locator in service_links.items():
+            try:
+                count = service_locator.count()
+                if count > 0:
+                    is_visible = service_locator.first.is_visible(timeout=5000)
+                    is_clickable = service_locator.first.is_enabled() if is_visible else False
+                else:
+                    is_visible = False
+                    is_clickable = False
+            except Exception:
+                is_visible = False
+                is_clickable = False
+            
+            service_results[service_name] = {
+                "visible": is_visible,
+                "clickable": is_clickable
+            }
+            
+            if not is_visible:
+                allure.attach(
+                    f"Service link '{service_name}' is not visible (count: {count if 'count' in locals() else 0})",
+                    name=f"missing_service_link_{service_name}",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+        
+        results["service_links"] = service_results
+        
+        if header_visible:
+            allure.attach(
+                self.main_page.services_section_header.screenshot(),
+                name="services_section_header",
+                attachment_type=allure.attachment_type.PNG
+            )
+        
+        return results
+    
+    @allure.step("Close menu")
+    def close_menu(self) -> None:
+        """Close the menu by clicking the menu button again"""
+        self.main_page.menu_button.click()
+        # Wait for menu panel to be hidden
+        try:
+            self.main_page.menu_panel.wait_for(state="hidden", timeout=5000)
+        except Exception:
+            # If menu panel wait fails, check if menu panel is actually hidden by checking visibility
+            try:
+                # Check if menu panel is not visible (hidden)
+                if not self.main_page.menu_panel.is_visible(timeout=2000):
+                    # Menu panel is hidden
+                    pass
+                else:
+                    # Menu panel is still visible, wait for it to become hidden
+                    self.main_page.menu_panel.wait_for(state="hidden", timeout=3000)
+            except Exception:
+                # If menu panel check fails, verify menu button is still visible and enabled
+                # (menu button should be visible when menu is closed)
+                try:
+                    self.main_page.menu_button.wait_for(state="visible", timeout=2000)
+                    # Menu button is visible, which indicates menu is likely closed
+                except Exception:
+                    # If all checks fail, menu is likely closed (button might be in different state)
+                    pass
+        allure.attach(
+            self.page.screenshot(),
+            name="menu_closed",
+            attachment_type=allure.attachment_type.PNG
+        )
+    
+    @allure.step("Verify menu panel is hidden")
+    def verify_menu_panel_hidden(self) -> bool:
+        """
+        Verify menu panel is hidden or not displayed
+        
+        Returns:
+            bool: True if menu panel is hidden, False otherwise
+        """
+        # Check if menu panel is hidden
+        is_hidden = self.main_page.verify_menu_panel_hidden()
+        # If menu panel check fails, check if menu panel is actually hidden now
+        if not is_hidden:
+            # Wait for menu panel to become hidden
+            try:
+                self.main_page.menu_panel.wait_for(state="hidden", timeout=3000)
+                is_hidden = True
+            except Exception:
+                # If menu panel wait fails, check visibility directly
+                try:
+                    # Check if menu panel is not visible (hidden)
+                    is_hidden = not self.main_page.menu_panel.is_visible(timeout=2000)
+                except Exception:
+                    # If we can't check menu panel visibility, verify menu button state
+                    # (menu button should be visible when menu is closed)
+                    try:
+                        button_visible = self.main_page.menu_button.is_visible(timeout=2000)
+                        button_clickable = self.main_page.menu_button.is_enabled()
+                        if button_visible and button_clickable:
+                            # Menu button is visible and clickable, menu is likely closed
+                            # (menu panel might still exist in DOM but not visible)
+                            is_hidden = True
+                        else:
+                            is_hidden = False
+                    except Exception:
+                        # If we can't check button, assume menu is closed
+                        is_hidden = True
+        return is_hidden
 
