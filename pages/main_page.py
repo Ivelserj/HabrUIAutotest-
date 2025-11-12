@@ -347,4 +347,240 @@ class MainPage:
             "Карьера": self.service_career_link,
             "Курсы": self.service_courses_link
         }
+    
+    # Footer elements
+    @property
+    def footer_menu_container(self) -> Locator:
+        """Footer menu container"""
+        return self.page.locator('div.tm-footer-menu__container')
+    
+    @property
+    def footer_section_main(self) -> Locator:
+        """Main footer section (div.tm-footer)"""
+        return self.page.locator('div.tm-footer')
+    
+    # Footer menu titles
+    @property
+    def footer_title_account(self) -> Locator:
+        """Footer title 'Ваш аккаунт'"""
+        return self.footer_menu_container.locator('p.tm-footer-menu__block-title').filter(has_text='Ваш аккаунт')
+    
+    @property
+    def footer_title_sections(self) -> Locator:
+        """Footer title 'Разделы'"""
+        return self.footer_menu_container.locator('p.tm-footer-menu__block-title').filter(has_text='Разделы')
+    
+    @property
+    def footer_title_information(self) -> Locator:
+        """Footer title 'Информация'"""
+        return self.footer_menu_container.locator('p.tm-footer-menu__block-title').filter(has_text='Информация')
+    
+    @property
+    def footer_title_services(self) -> Locator:
+        """Footer title 'Услуги'"""
+        return self.footer_menu_container.locator('p.tm-footer-menu__block-title').filter(has_text='Услуги')
+    
+    # Footer menu options - Ваш аккаунт
+    @property
+    def footer_link_login(self) -> Locator:
+        """Footer link 'Войти'"""
+        return self.footer_menu_container.locator('a').filter(has_text='Войти')
+    
+    @property
+    def footer_link_register(self) -> Locator:
+        """Footer link 'Регистрация'"""
+        return self.footer_menu_container.locator('a').filter(has_text='Регистрация')
+    
+    # Footer menu options - Разделы
+    @property
+    def footer_link_articles(self) -> Locator:
+        """Footer link 'Статьи'"""
+        return self.footer_menu_container.locator('a').filter(has_text='Статьи')
+    
+    @property
+    def footer_link_news(self) -> Locator:
+        """Footer link 'Новости'"""
+        return self.footer_menu_container.locator('a').filter(has_text='Новости')
+    
+    @property
+    def footer_link_hubs(self) -> Locator:
+        """Footer link 'Хабы'"""
+        return self.footer_menu_container.locator('a').filter(has_text='Хабы')
+    
+    @property
+    def footer_link_companies(self) -> Locator:
+        """Footer link 'Компании'"""
+        return self.footer_menu_container.locator('a').filter(has_text='Компании')
+    
+    @property
+    def footer_link_authors(self) -> Locator:
+        """Footer link 'Авторы'"""
+        return self.footer_menu_container.locator('a').filter(has_text='Авторы')
+    
+    @property
+    def footer_link_sandbox(self) -> Locator:
+        """Footer link 'Песочница'"""
+        return self.footer_menu_container.locator('a').filter(has_text='Песочница')
+    
+    # Footer menu options - Информация
+    @property
+    def footer_link_site_structure(self) -> Locator:
+        """Footer link 'Устройство сайта'"""
+        return self.footer_menu_container.locator('a').filter(has_text='Устройство сайта')
+    
+    @property
+    def footer_link_for_authors(self) -> Locator:
+        """Footer link 'Для авторов'"""
+        return self.footer_menu_container.locator('a').filter(has_text='Для авторов')
+    
+    @property
+    def footer_link_for_companies(self) -> Locator:
+        """Footer link 'Для компаний'"""
+        return self.footer_menu_container.locator('a').filter(has_text='Для компаний')
+    
+    @property
+    def footer_link_documents(self) -> Locator:
+        """Footer link 'Документы'"""
+        return self.footer_menu_container.locator('a').filter(has_text='Документы')
+    
+    @property
+    def footer_link_agreement(self) -> Locator:
+        """Footer link 'Соглашение'"""
+        return self.footer_menu_container.locator('a').filter(has_text='Соглашение')
+    
+    @property
+    def footer_link_privacy(self) -> Locator:
+        """Footer link 'Конфиденциальность'"""
+        return self.footer_menu_container.locator('a').filter(has_text='Конфиденциальность')
+    
+    # Footer menu options - Услуги
+    @property
+    def footer_link_corporate_blog(self) -> Locator:
+        """Footer link 'Корпоративный блог'"""
+        return self.footer_menu_container.locator('a').filter(has_text='Корпоративный блог')
+    
+    @property
+    def footer_link_media_advertising(self) -> Locator:
+        """Footer link 'Медийная реклама'"""
+        return self.footer_menu_container.locator('a').filter(has_text='Медийная реклама')
+    
+    @property
+    def footer_link_native_projects(self) -> Locator:
+        """Footer link 'Нативные проекты'"""
+        return self.footer_menu_container.locator('a').filter(has_text='Нативные проекты')
+    
+    @property
+    def footer_link_education_programs(self) -> Locator:
+        """Footer link 'Образовательные программы'"""
+        return self.footer_menu_container.locator('a').filter(has_text='Образовательные программы')
+    
+    @property
+    def footer_link_startups(self) -> Locator:
+        """Footer link 'Стартапам'"""
+        return self.footer_menu_container.locator('a').filter(has_text='Стартапам')
+    
+    # Footer section elements
+    @property
+    def footer_copyright_text(self) -> Locator:
+        """Copyright text '© 2006–2025, Habr'"""
+        return self.footer_section_main.get_by_text('© 2006–2025, Habr')
+    
+    @property
+    def footer_support_link(self) -> Locator:
+        """Footer link 'Техническая поддержка'"""
+        return self.footer_section_main.locator('a').filter(has_text='Техническая поддержка')
+    
+    @property
+    def footer_language_button(self) -> Locator:
+        """Footer button 'Настройка языка'"""
+        return self.footer_section_main.locator('button').filter(has_text='Настройка языка')
+    
+    @property
+    def footer_social_icons(self) -> Locator:
+        """Social icons container - finds container by looking for social media links"""
+        # Try to find a container that has multiple social media links
+        # Look for a div or section that contains links to vk, telegram, youtube, or dzen
+        return self.footer_section_main.locator('div:has(a[href*="vk.com"]), div:has(a[href*="t.me"]), div:has(a[href*="youtube"]), div:has(a[href*="dzen.ru"]), [class*="social-icons"], [class*="social"]').first
+    
+    @property
+    def footer_social_icon_vk(self) -> Locator:
+        """VK social icon"""
+        return self.footer_social_icons.locator('a[href*="vk.com"], a[href*="vk.ru"]').first
+    
+    @property
+    def footer_social_icon_telegram(self) -> Locator:
+        """Telegram social icon"""
+        return self.footer_social_icons.locator('a[href*="t.me"], a[href*="telegram"]').first
+    
+    @property
+    def footer_social_icon_youtube(self) -> Locator:
+        """Youtube social icon"""
+        return self.footer_social_icons.locator('a[href*="youtube.com"], a[href*="youtu.be"]').first
+    
+    @property
+    def footer_social_icon_dzen(self) -> Locator:
+        """Dzen social icon"""
+        return self.footer_social_icons.locator('a[href*="dzen.ru"]').first
+    
+    # Footer verification methods
+    def verify_footer_menu_container_exists(self) -> bool:
+        """Verify footer menu container exists and is visible"""
+        return self.footer_menu_container.is_visible()
+    
+    def get_all_footer_titles(self) -> dict:
+        """Get dictionary of all footer title locators"""
+        return {
+            "Ваш аккаунт": self.footer_title_account,
+            "Разделы": self.footer_title_sections,
+            "Информация": self.footer_title_information,
+            "Услуги": self.footer_title_services
+        }
+    
+    def get_all_footer_options_account(self) -> dict:
+        """Get dictionary of footer options under 'Ваш аккаунт'"""
+        return {
+            "Войти": self.footer_link_login,
+            "Регистрация": self.footer_link_register
+        }
+    
+    def get_all_footer_options_sections(self) -> dict:
+        """Get dictionary of footer options under 'Разделы'"""
+        return {
+            "Статьи": self.footer_link_articles,
+            "Новости": self.footer_link_news,
+            "Хабы": self.footer_link_hubs,
+            "Компании": self.footer_link_companies,
+            "Авторы": self.footer_link_authors,
+            "Песочница": self.footer_link_sandbox
+        }
+    
+    def get_all_footer_options_information(self) -> dict:
+        """Get dictionary of footer options under 'Информация'"""
+        return {
+            "Устройство сайта": self.footer_link_site_structure,
+            "Для авторов": self.footer_link_for_authors,
+            "Для компаний": self.footer_link_for_companies,
+            "Документы": self.footer_link_documents,
+            "Соглашение": self.footer_link_agreement,
+            "Конфиденциальность": self.footer_link_privacy
+        }
+    
+    def get_all_footer_options_services(self) -> dict:
+        """Get dictionary of footer options under 'Услуги'"""
+        return {
+            "Корпоративный блог": self.footer_link_corporate_blog,
+            "Медийная реклама": self.footer_link_media_advertising,
+            "Нативные проекты": self.footer_link_native_projects,
+            "Образовательные программы": self.footer_link_education_programs,
+            "Стартапам": self.footer_link_startups
+        }
+    
+    def get_all_social_icons(self) -> dict:
+        """Get dictionary of all social icon locators"""
+        return {
+            "VK": self.footer_social_icon_vk,
+            "Telegram": self.footer_social_icon_telegram,
+            "Youtube": self.footer_social_icon_youtube,
+            "Dzen": self.footer_social_icon_dzen
+        }
 

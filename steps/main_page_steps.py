@@ -408,4 +408,299 @@ class MainPageSteps:
                         # If we can't check button, assume menu is closed
                         is_hidden = True
         return is_hidden
+    
+    # Footer-related steps
+    @allure.step("Scroll to footer")
+    def scroll_to_footer(self) -> None:
+        """Scroll to the bottom of the page to ensure footer is visible"""
+        self.page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+        # Wait for footer section to be visible (explicit wait)
+        self.main_page.footer_section_main.wait_for(state="visible", timeout=5000)
+        allure.attach(
+            self.page.screenshot(),
+            name="scrolled_to_footer",
+            attachment_type=allure.attachment_type.PNG
+        )
+    
+    @allure.step("Verify footer menu container exists and is visible")
+    def verify_footer_menu_container(self) -> bool:
+        """
+        Verify footer menu container exists and is visible
+        
+        Returns:
+            bool: True if footer menu container is visible, False otherwise
+        """
+        is_visible = self.main_page.verify_footer_menu_container_exists()
+        if is_visible:
+            allure.attach(
+                self.main_page.footer_menu_container.screenshot(),
+                name="footer_menu_container",
+                attachment_type=allure.attachment_type.PNG
+            )
+        return is_visible
+    
+    @allure.step("Verify all footer menu titles are displayed")
+    def verify_footer_titles(self) -> dict:
+        """
+        Verify all footer menu titles are present and visible
+        
+        Returns:
+            dict: Dictionary with title names as keys and visibility status as values
+        """
+        titles = self.main_page.get_all_footer_titles()
+        results = {}
+        
+        for title_name, title_locator in titles.items():
+            try:
+                count = title_locator.count()
+                if count > 0:
+                    is_visible = title_locator.first.is_visible(timeout=5000)
+                else:
+                    is_visible = False
+            except Exception:
+                is_visible = False
+            
+            results[title_name] = is_visible
+            
+            if not is_visible:
+                allure.attach(
+                    f"Footer title '{title_name}' is not visible (count: {count if 'count' in locals() else 0})",
+                    name=f"missing_footer_title_{title_name}",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+        
+        return results
+    
+    @allure.step("Verify footer menu options are displayed and clickable")
+    def verify_footer_options(self, section_name: str) -> dict:
+        """
+        Verify footer menu options for a specific section are displayed and clickable
+        
+        Args:
+            section_name: Name of the section ('account', 'sections', 'information', 'services')
+        
+        Returns:
+            dict: Dictionary with option names as keys and dict with 'visible' and 'clickable' as values
+        """
+        section_map = {
+            'account': self.main_page.get_all_footer_options_account(),
+            'sections': self.main_page.get_all_footer_options_sections(),
+            'information': self.main_page.get_all_footer_options_information(),
+            'services': self.main_page.get_all_footer_options_services()
+        }
+        
+        options = section_map.get(section_name, {})
+        results = {}
+        
+        for option_name, option_locator in options.items():
+            try:
+                count = option_locator.count()
+                if count > 0:
+                    is_visible = option_locator.first.is_visible(timeout=5000)
+                    is_clickable = option_locator.first.is_enabled() if is_visible else False
+                else:
+                    is_visible = False
+                    is_clickable = False
+            except Exception:
+                is_visible = False
+                is_clickable = False
+            
+            results[option_name] = {
+                "visible": is_visible,
+                "clickable": is_clickable
+            }
+            
+            if not is_visible:
+                allure.attach(
+                    f"Footer option '{option_name}' is not visible (count: {count if 'count' in locals() else 0})",
+                    name=f"missing_footer_option_{section_name}_{option_name}",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+        
+        return results
+    
+    @allure.step("Verify footer section is displayed")
+    def verify_footer_section_main(self) -> bool:
+        """
+        Verify main footer section (div.tm-footer) is present and visible
+        
+        Returns:
+            bool: True if footer section is visible, False otherwise
+        """
+        is_visible = self.main_page.footer_section_main.is_visible()
+        if is_visible:
+            allure.attach(
+                self.main_page.footer_section_main.screenshot(),
+                name="footer_section_main",
+                attachment_type=allure.attachment_type.PNG
+            )
+        return is_visible
+    
+    @allure.step("Close popup banner if present")
+    def close_popup_banner(self) -> None:
+        """
+        Close popup banner if it is present and visible
+        
+        The banner has locator 'div.fixed-banner-wrapper' and close button has locator 'button.close-button'
+        """
+        try:
+            banner = self.page.locator('div.fixed-banner-wrapper')
+            if banner.is_visible(timeout=3000):
+                close_button = self.page.locator('button.close-button')
+                if close_button.is_visible(timeout=2000):
+                    close_button.click()
+                    # Wait for banner to be hidden
+                    try:
+                        banner.wait_for(state="hidden", timeout=3000)
+                    except Exception:
+                        # If wait fails, check if banner is actually hidden
+                        if not banner.is_visible(timeout=1000):
+                            pass  # Banner is hidden
+                allure.attach(
+                    "Popup banner was closed successfully",
+                    name="banner_closed",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+        except Exception:
+            # Banner might not be present, which is fine
+            allure.attach(
+                "Popup banner was not present or already closed",
+                name="banner_not_present",
+                attachment_type=allure.attachment_type.TEXT
+            )
+    
+    @allure.step("Verify copyright text is visible")
+    def verify_copyright_text(self) -> bool:
+        """
+        Verify copyright text '© 2006–2025, Habr' is visible in footer
+        
+        Returns:
+            bool: True if copyright text is visible, False otherwise
+        """
+        try:
+            is_visible = self.main_page.footer_copyright_text.is_visible(timeout=5000)
+        except Exception:
+            is_visible = False
+        
+        if is_visible:
+            allure.attach(
+                self.main_page.footer_copyright_text.screenshot(),
+                name="copyright_text",
+                attachment_type=allure.attachment_type.PNG
+            )
+        return is_visible
+    
+    @allure.step("Verify footer link is displayed and clickable")
+    def verify_footer_link(self, link_name: str) -> dict:
+        """
+        Verify a footer link is displayed and clickable
+        
+        Args:
+            link_name: Name of the link ('support' or 'language')
+        
+        Returns:
+            dict: Dictionary with 'visible' and 'clickable' status
+        """
+        link_map = {
+            'support': self.main_page.footer_support_link,
+            'language': self.main_page.footer_language_button
+        }
+        
+        link_locator = link_map.get(link_name)
+        if not link_locator:
+            return {"visible": False, "clickable": False}
+        
+        try:
+            count = link_locator.count()
+            if count > 0:
+                is_visible = link_locator.first.is_visible(timeout=5000)
+                is_clickable = link_locator.first.is_enabled() if is_visible else False
+            else:
+                is_visible = False
+                is_clickable = False
+        except Exception:
+            is_visible = False
+            is_clickable = False
+        
+        if is_visible:
+            allure.attach(
+                link_locator.first.screenshot(),
+                name=f"footer_link_{link_name}",
+                attachment_type=allure.attachment_type.PNG
+            )
+        
+        return {"visible": is_visible, "clickable": is_clickable}
+    
+    @allure.step("Verify social-icons section is displayed")
+    def verify_social_icons_section(self) -> bool:
+        """
+        Verify social-icons section is displayed by checking if at least one social icon is visible
+        
+        Returns:
+            bool: True if social-icons section is visible (at least one icon found), False otherwise
+        """
+        icons = self.main_page.get_all_social_icons()
+        is_visible = False
+        
+        # Check if at least one social icon is visible
+        for icon_name, icon_locator in icons.items():
+            try:
+                count = icon_locator.count()
+                if count > 0:
+                    if icon_locator.first.is_visible(timeout=2000):
+                        is_visible = True
+                        # Take screenshot of the entire social icons block
+                        try:
+                            social_icons_section = self.page.locator('div.social-icons.tm-footer__social')
+                            if social_icons_section.is_visible(timeout=2000):
+                                allure.attach(
+                                    social_icons_section.screenshot(),
+                                    name="social_icons_section",
+                                    attachment_type=allure.attachment_type.PNG
+                                )
+                        except Exception:
+                            pass
+                        break
+            except Exception:
+                continue
+        
+        return is_visible
+    
+    @allure.step("Verify all social icons are displayed and clickable")
+    def verify_social_icons(self) -> dict:
+        """
+        Verify all social icons are displayed and clickable
+        
+        Returns:
+            dict: Dictionary with icon names as keys and dict with 'visible' and 'clickable' as values
+        """
+        icons = self.main_page.get_all_social_icons()
+        results = {}
+        
+        for icon_name, icon_locator in icons.items():
+            try:
+                count = icon_locator.count()
+                if count > 0:
+                    is_visible = icon_locator.first.is_visible(timeout=5000)
+                    is_clickable = icon_locator.first.is_enabled() if is_visible else False
+                else:
+                    is_visible = False
+                    is_clickable = False
+            except Exception:
+                is_visible = False
+                is_clickable = False
+            
+            results[icon_name] = {
+                "visible": is_visible,
+                "clickable": is_clickable
+            }
+            
+            if not is_visible:
+                allure.attach(
+                    f"Social icon '{icon_name}' is not visible (count: {count if 'count' in locals() else 0})",
+                    name=f"missing_social_icon_{icon_name}",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+        
+        return results
 

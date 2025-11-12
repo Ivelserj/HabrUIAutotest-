@@ -176,8 +176,8 @@ TEST STEPS:
    - Verify the text "© 2006–2025, Habr" is visible in the footer section
 11. Verify the "Техническая поддержка" (Technical Support) link in footer:
    - Verify the "Техническая поддержка" link is displayed and clickable
-12. Verify the "Настройка языка" (Language Settings) link in footer:
-   - Verify the "Настройка языка" link is displayed and clickable
+12. Verify the "Настройка языка" (Language Settings) button in footer:
+   - Verify the "Настройка языка" button is displayed and clickable
 13. Verify the social-icons block in footer:
    - Verify the social-icons section is displayed
    - Verify each social icon (VK, Telegram, Youtube, Dzen) in the section is displayed and clickable
@@ -216,9 +216,9 @@ EXPECTED RESULTS:
 - Footer section is present and visible on the page
 - Copyright text "© 2006–2025, Habr" is visible in the footer section
 - "Техническая поддержка" (Technical Support) link is displayed and clickable
-- "Настройка языка" (Language Settings) link is displayed and clickable
+- "Настройка языка" (Language Settings) button is displayed and clickable
 - Social-icons section is displayed
-- All social icons in the section are displayed and clickable
+- All social icons (VK, Telegram, Youtube, Dzen)  in the section are displayed and clickable
 - All footer elements are properly structured and accessible
 
 ================================================================================
