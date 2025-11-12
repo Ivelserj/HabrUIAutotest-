@@ -130,64 +130,96 @@ TEST CASE 3: VERIFY FOOTER FUNCTIONALITY
 ================================================================================
 
 OBJECTIVE:
-Verify that the footer section is present and displayed correctly, and all footer links are visible and clickable.
+Verify that the footer menu section is present and displayed correctly, all footer menu titles are visible, all footer menu options are displayed and clickable, and the footer section with support link is displayed.
 
 TEST STEPS:
 1. Navigate to the main page URL (https://habr.com)
+   - Navigate to https://habr.com
+   - Wait for page to load completely
 2. Scroll to the bottom of the page:
    - Scroll down to ensure the footer section is visible
+   - Wait for footer section to be visible
+3. Verify the footer menu container exists and is displayed:
+   - Verify the footer menu container is present and visible
+4. Verify all four footer menu titles are displayed:
+   - Verify the "Ваш аккаунт" (Your Account) title is present and visible
+   - Verify the "Разделы" (Sections) title is present and visible
+   - Verify the "Информация" (Information) title is present and visible
+   - Verify the "Услуги" (Services) title is present and visible
+5. Verify footer menu options under "Ваш аккаунт" title:
+   - Verify the "Войти" (Login) option is displayed and clickable
+   - Verify the "Регистрация" (Registration) option is displayed and clickable
+6. Verify footer menu options under "Разделы" title:
+   - Verify the "Статьи" (Articles) option is displayed and clickable
+   - Verify the "Новости" (News) option is displayed and clickable
+   - Verify the "Хабы" (Hubs) option is displayed and clickable
+   - Verify the "Компании" (Companies) option is displayed and clickable
+   - Verify the "Авторы" (Authors) option is displayed and clickable
+   - Verify the "Песочница" (Sandbox) option is displayed and clickable
+7. Verify footer menu options under "Информация" title:
+   - Verify the "Устройство сайта" (Site Structure) option is displayed and clickable
+   - Verify the "Для авторов" (For Authors) option is displayed and clickable
+   - Verify the "Для компаний" (For Companies) option is displayed and clickable
+   - Verify the "Документы" (Documents) option is displayed and clickable
+   - Verify the "Соглашение" (Agreement) option is displayed and clickable
+   - Verify the "Конфиденциальность" (Privacy) option is displayed and clickable
+8. Verify footer menu options under "Услуги" title:
+   - Verify the "Корпоративный блог" (Corporate Blog) option is displayed and clickable
+   - Verify the "Медийная реклама" (Media Advertising) option is displayed and clickable
+   - Verify the "Нативные проекты" (Native Projects) option is displayed and clickable
+   - Verify the "Образовательные программы" (Educational Programs) option is displayed and clickable
+   - Verify the "Стартапам" (For Startups) option is displayed and clickable
+9. Verify the footer section is displayed:
    - Verify the footer section is present on the page
-3. Verify the footer element exists:
-   - Locate and verify the footer element is present
-   - Verify the footer is visible and displayed on the page
-4. Verify footer sections are displayed:
-   - Verify the "О проекте" (About Project) section is present and visible
-   - Verify the "Сервисы" (Services) section is present and visible
-   - Verify the "Информация" (Information) section is present and visible
-   - Verify the "Социальные сети" (Social Networks) section is present and visible
-   - Verify footer content is properly structured
-5. Verify footer links in "О проекте" section:
-   - Verify the "Устройство сайта" (Site Structure) link is present and clickable
-   - Verify the "Для авторов" (For Authors) link is present and clickable
-   - Verify the "Для компаний" (For Companies) link is present and clickable
-   - Verify the "Документы" (Documents) link is present and clickable
-   - Verify the "Соглашение" (Agreement) link is present and clickable
-   - Verify the "Конфиденциальность" (Privacy) link is present and clickable
-6. Verify footer links in "Сервисы" section:
-   - Verify the "Корпоративный блог" (Corporate Blog) link is present and clickable
-   - Verify the "Медийная реклама" (Media Advertising) link is present and clickable
-   - Verify the "Нативные проекты" (Native Projects) link is present and clickable
-   - Verify the "Образовательные программы" (Educational Programs) link is present and clickable
-   - Verify the "Стартапам" (For Startups) link is present and clickable
-7. Verify footer links in "Информация" section:
-   - Verify the "Помощь" (Help) link is present and clickable
-   - Verify the "Контакты" (Contacts) link is present and clickable
-   - Verify the "Реклама" (Advertising) link is present and clickable
-   - Verify the "Вакансии" (Jobs) link is present and clickable
-8. Verify footer links in "Социальные сети" section:
-   - Verify the "Twitter" link is present and clickable
-   - Verify the "Facebook" link is present and clickable
-   - Verify the "VK" link is present and clickable
-   - Verify the "Telegram" link is present and clickable
-9. Verify footer information is displayed:
-   - Verify copyright or company information is present and visible
-   - Verify the "Хабр" (Habr) company name is present and visible
-   - Verify footer text is readable and properly formatted
-10. Verify footer responsiveness:
-   - Verify the footer displays correctly at the bottom of the page
-   - Verify the footer is accessible and visible
+   - Verify the footer section is visible and displayed
+10. Verify the copyright text in footer:
+   - Verify the text "© 2006–2025, Habr" is visible in the footer section
+11. Verify the "Техническая поддержка" (Technical Support) link in footer:
+   - Verify the "Техническая поддержка" link is displayed and clickable
+12. Verify the "Настройка языка" (Language Settings) link in footer:
+   - Verify the "Настройка языка" link is displayed and clickable
+13. Verify the social-icons block in footer:
+   - Verify the social-icons section is displayed
+   - Verify each social icon (VK, Telegram, Youtube, Dzen) in the section is displayed and clickable
+
 
 EXPECTED RESULTS:
+- Footer menu container is present and visible on the page
+- All four footer menu titles are present and visible:
+  * "Ваш аккаунт" (Your Account)
+  * "Разделы" (Sections)
+  * "Информация" (Information)
+  * "Услуги" (Services)
+- All footer menu options under "Ваш аккаунт" are displayed and clickable:
+  * "Войти" (Login)
+  * "Регистрация" (Registration)
+- All footer menu options under "Разделы" are displayed and clickable:
+  * "Статьи" (Articles)
+  * "Новости" (News)
+  * "Хабы" (Hubs)
+  * "Компании" (Companies)
+  * "Авторы" (Authors)
+  * "Песочница" (Sandbox)
+- All footer menu options under "Информация" are displayed and clickable:
+  * "Устройство сайта" (Site Structure)
+  * "Для авторов" (For Authors)
+  * "Для компаний" (For Companies)
+  * "Документы" (Documents)
+  * "Соглашение" (Agreement)
+  * "Конфиденциальность" (Privacy)
+- All footer menu options under "Услуги" are displayed and clickable:
+  * "Корпоративный блог" (Corporate Blog)
+  * "Медийная реклама" (Media Advertising)
+  * "Нативные проекты" (Native Projects)
+  * "Образовательные программы" (Educational Programs)
+  * "Стартапам" (For Startups)
 - Footer section is present and visible on the page
-- Footer element is found and displayed correctly
-- All footer sections ("О проекте", "Сервисы", "Информация", "Социальные сети") are present and visible
-- All footer links in "О проекте" section are present, visible, and clickable
-- All footer links in "Сервисы" section are present, visible, and clickable
-- All footer links in "Информация" section are present, visible, and clickable
-- All footer links in "Социальные сети" section are present, visible, and clickable
-- Footer information (copyright, company name) is displayed correctly
-- Footer is properly positioned at the bottom of the page
-- All footer sections and subsections are properly structured and displayed
+- Copyright text "© 2006–2025, Habr" is visible in the footer section
+- "Техническая поддержка" (Technical Support) link is displayed and clickable
+- "Настройка языка" (Language Settings) link is displayed and clickable
+- Social-icons section is displayed
+- All social icons in the section are displayed and clickable
+- All footer elements are properly structured and accessible
 
 ================================================================================
 TEST CASE 4: VERIFY AUTHORIZATION BUTTON FUNCTIONALITY
