@@ -7,6 +7,7 @@ import pytest
 from pathlib import Path
 from playwright.sync_api import Playwright, Browser, BrowserContext, Page
 from steps.main_page_steps import MainPageSteps
+from steps.login_page_steps import LoginPageSteps
 
 
 def create_allure_environment_file():
@@ -159,4 +160,18 @@ def main_page_steps(page: Page) -> MainPageSteps:
         MainPageSteps instance
     """
     return MainPageSteps(page)
+
+
+@pytest.fixture(scope="function")
+def login_page_steps(page: Page) -> LoginPageSteps:
+    """
+    LoginPageSteps fixture (provides steps instance for each test)
+    
+    Args:
+        page: Page instance
+        
+    Returns:
+        LoginPageSteps instance
+    """
+    return LoginPageSteps(page)
 
