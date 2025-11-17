@@ -255,19 +255,37 @@ class LoginPageSteps:
         
         if social_buttons_block_visible:
             try:
-                # Use shorter timeout for screenshot to avoid long waits
+                # Wait for element to be visible and stable before taking screenshot
+                social_buttons_block_locator = self.login_page.social_buttons_block
+                social_buttons_block_locator.wait_for(state="visible", timeout=10000)
+                # Wait a bit more for any animations or dynamic content to settle
+                self.page.wait_for_timeout(500)
+                # Take screenshot with longer timeout since we've already waited for visibility
                 allure.attach(
-                    self.login_page.social_buttons_block.screenshot(timeout=3000),
+                    social_buttons_block_locator.screenshot(timeout=5000),
                     name="social_buttons_block",
                     attachment_type=allure.attachment_type.PNG
                 )
-            except Exception:
-                # If screenshot fails, attach a text message instead
-                allure.attach(
-                    "Social buttons block screenshot failed - element may not be stable",
-                    name="social_buttons_block_screenshot_failed",
-                    attachment_type=allure.attachment_type.TEXT
-                )
+            except Exception as e:
+                # If screenshot fails, try taking page screenshot as fallback
+                try:
+                    allure.attach(
+                        self.page.screenshot(timeout=3000),
+                        name="social_buttons_block_page_fallback",
+                        attachment_type=allure.attachment_type.PNG
+                    )
+                    allure.attach(
+                        f"Social buttons block screenshot failed, using page screenshot as fallback. Error: {str(e)}",
+                        name="social_buttons_block_screenshot_info",
+                        attachment_type=allure.attachment_type.TEXT
+                    )
+                except Exception:
+                    # If all screenshots fail, attach error message
+                    allure.attach(
+                        f"Social buttons block screenshot failed - element may not be stable. Error: {str(e)}",
+                        name="social_buttons_block_screenshot_failed",
+                        attachment_type=allure.attachment_type.TEXT
+                    )
         else:
             allure.attach(
                 "Social buttons block 'div.socials-buttons' is not visible",
@@ -281,19 +299,37 @@ class LoginPageSteps:
         
         if social_text_visible:
             try:
-                # Use shorter timeout for screenshot to avoid long waits
+                # Wait for element to be visible and stable before taking screenshot
+                social_text_locator = self.login_page.social_login_text
+                social_text_locator.wait_for(state="visible", timeout=10000)
+                # Wait a bit more for any animations or dynamic content to settle
+                self.page.wait_for_timeout(500)
+                # Take screenshot with longer timeout since we've already waited for visibility
                 allure.attach(
-                    self.login_page.social_login_text.screenshot(timeout=3000),
+                    social_text_locator.screenshot(timeout=5000),
                     name="social_login_text",
                     attachment_type=allure.attachment_type.PNG
                 )
-            except Exception:
-                # If screenshot fails, attach a text message instead
-                allure.attach(
-                    "Social login text screenshot failed - element may not be stable",
-                    name="social_login_text_screenshot_failed",
-                    attachment_type=allure.attachment_type.TEXT
-                )
+            except Exception as e:
+                # If screenshot fails, try taking page screenshot as fallback
+                try:
+                    allure.attach(
+                        self.page.screenshot(timeout=3000),
+                        name="social_login_text_page_fallback",
+                        attachment_type=allure.attachment_type.PNG
+                    )
+                    allure.attach(
+                        f"Social login text screenshot failed, using page screenshot as fallback. Error: {str(e)}",
+                        name="social_login_text_screenshot_info",
+                        attachment_type=allure.attachment_type.TEXT
+                    )
+                except Exception:
+                    # If all screenshots fail, attach error message
+                    allure.attach(
+                        f"Social login text screenshot failed - element may not be stable. Error: {str(e)}",
+                        name="social_login_text_screenshot_failed",
+                        attachment_type=allure.attachment_type.TEXT
+                    )
         
         # Verify all social login buttons
         social_buttons = self.login_page.get_all_social_login_buttons()
@@ -462,96 +498,6 @@ class LoginPageSteps:
                     )
             except Exception:
                 pass
-        
-        # Verify captcha checkbox
-        checkbox_visible = self.login_page.verify_captcha_checkbox_exists()
-        results["captcha_checkbox"] = {"visible": checkbox_visible}
-        
-        if checkbox_visible:
-            try:
-                # Use the method with exact iframe locator: page.locator("//iframe[@title='SmartCaptcha checkbox widget']")
-                # and find div with class 'CheckboxCaptcha-Anchor' inside the iframe
-                checkbox = self.login_page.get_captcha_checkbox_by_iframe_title()
-                if checkbox and checkbox.is_visible(timeout=2000):
-                    allure.attach(
-                        checkbox.screenshot(),
-                        name="captcha_checkbox",
-                        attachment_type=allure.attachment_type.PNG
-                    )
-            except Exception:
-                pass
-        else:
-            allure.attach(
-                "Captcha checkbox is not visible",
-                name="captcha_checkbox_not_visible",
-                attachment_type=allure.attachment_type.TEXT
-            )
-        
-        # Verify captcha title
-        title_visible = self.login_page.verify_captcha_title_exists()
-        results["captcha_title"] = {"visible": title_visible}
-        
-        if title_visible:
-            try:
-                title = self.login_page.get_captcha_title()
-                if title and title.is_visible(timeout=2000):
-                    allure.attach(
-                        title.screenshot(),
-                        name="captcha_title",
-                        attachment_type=allure.attachment_type.PNG
-                    )
-            except Exception:
-                pass
-        else:
-            allure.attach(
-                "Captcha title is not visible",
-                name="captcha_title_not_visible",
-                attachment_type=allure.attachment_type.TEXT
-            )
-        
-        # Verify captcha description
-        description_visible = self.login_page.verify_captcha_description_exists()
-        results["captcha_description"] = {"visible": description_visible}
-        
-        if description_visible:
-            try:
-                description = self.login_page.get_captcha_description()
-                if description and description.is_visible(timeout=2000):
-                    allure.attach(
-                        description.screenshot(),
-                        name="captcha_description",
-                        attachment_type=allure.attachment_type.PNG
-                    )
-            except Exception:
-                pass
-        else:
-            allure.attach(
-                "Captcha description is not visible",
-                name="captcha_description_not_visible",
-                attachment_type=allure.attachment_type.TEXT
-            )
-        
-        # Verify captcha links
-        links_visible = self.login_page.verify_captcha_links_exists()
-        results["captcha_links"] = {"visible": links_visible}
-        
-        if links_visible:
-            try:
-                links = self.login_page.get_captcha_links()
-                if links and links.is_visible(timeout=2000):
-                    allure.attach(
-                        links.screenshot(),
-                        name="captcha_links",
-                        attachment_type=allure.attachment_type.PNG
-                    )
-            except Exception:
-                pass
-        else:
-            allure.attach(
-                "Captcha links are not visible",
-                name="captcha_links_not_visible",
-                attachment_type=allure.attachment_type.TEXT
-            )
         
         return results
 

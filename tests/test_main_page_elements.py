@@ -853,37 +853,9 @@ class TestAuthorizationButtonFunctionality:
                 "Captcha iframe should be present"
             )
             
-            # Verify captcha checkbox
-            # captcha_checkbox_results = captcha_results.get("captcha_checkbox", {})
-            # assert captcha_checkbox_results.get("visible", False), (
-            #     "Captcha checkbox should be present and visible inside iframe"
-            # )
-            
-            # Verify captcha title
-            # captcha_title_results = captcha_results.get("captcha_title", {})
-            # assert captcha_title_results.get("visible", False), (
-            #     "Captcha title (checkbox-label) should be present and visible inside iframe"
-            # )
-            
-            # Verify captcha description
-            # captcha_description_results = captcha_results.get("captcha_description", {})
-            # assert captcha_description_results.get("visible", False), (
-            #     "Captcha description (checkbox-description) should be present and visible inside iframe"
-            # )
-            
-            # Verify captcha links
-            # captcha_links_results = captcha_results.get("captcha_links", {})
-            # assert captcha_links_results.get("visible", False), (
-            #     "Captcha links container should be present and visible inside iframe"
-            # )
-            
             captcha_status = (
                 f"Captcha container: visible={captcha_container_results.get('visible', False)}\n"
-                f"Captcha iframe: visible={captcha_iframe_results.get('visible', False)}\n"
-                f"Captcha checkbox: visible={captcha_results.get('captcha_checkbox', {}).get('visible', False)}\n"
-                f"Captcha title: visible={captcha_results.get('captcha_title', {}).get('visible', False)}\n"
-                f"Captcha description: visible={captcha_results.get('captcha_description', {}).get('visible', False)}\n"
-                f"Captcha links: visible={captcha_results.get('captcha_links', {}).get('visible', False)}"
+                f"Captcha iframe: visible={captcha_iframe_results.get('visible', False)}"
             )
             
             allure.attach(
