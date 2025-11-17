@@ -213,7 +213,9 @@ class LoginPage:
             # First try using frame_locator (recommended approach)
             frame_loc = self.captcha_frame_locator
             # Try multiple possible selectors for the checkbox
+            # CheckboxCaptcha-Anchor is the specific class for the checkbox div
             selectors = [
+                'div.CheckboxCaptcha-Anchor',
                 'div.CheckboxCaptcha-Checkbox',
                 'div[class*="CheckboxCaptcha"]',
                 'div[class*="checkbox"]',
@@ -243,7 +245,9 @@ class LoginPage:
                     # Wait for frame to load
                     frame.wait_for_load_state(timeout=10000)
                     # Try multiple selectors
+                    # CheckboxCaptcha-Anchor is the specific class for the checkbox div
                     selectors = [
+                        'div.CheckboxCaptcha-Anchor',
                         'div.CheckboxCaptcha-Checkbox',
                         'div[class*="CheckboxCaptcha"]',
                         'div[class*="checkbox"]',
@@ -257,6 +261,34 @@ class LoginPage:
                         except Exception:
                             continue
         except Exception:
+            pass
+        return None
+    
+    def get_captcha_checkbox_by_iframe_title(self):
+        """
+        Get captcha checkbox locator using iframe with title 'SmartCaptcha checkbox widget'
+        This method uses the exact iframe locator: page.locator("//iframe[@title='SmartCaptcha checkbox widget']")
+        
+        Returns:
+            Locator: Checkbox locator with class 'CheckboxCaptcha-Anchor' inside the iframe
+        """
+        try:
+            # Locate iframe by title attribute
+            iframe = self.page.locator("//iframe[@title='SmartCaptcha checkbox widget']")
+            
+            if iframe.count() > 0:
+                # Wait for iframe to be visible
+                iframe.wait_for(state="visible", timeout=5000)
+                # Get frame content
+                frame = iframe.content_frame()
+                if frame:
+                    # Wait for frame to load
+                    frame.wait_for_load_state(timeout=10000)
+                    # Find checkbox div with class CheckboxCaptcha-Anchor
+                    checkbox = frame.locator('div.CheckboxCaptcha-Anchor').first
+                    if checkbox.count() > 0:
+                        return checkbox
+        except Exception as e:
             pass
         return None
     
@@ -488,7 +520,8 @@ class LoginPage:
     def verify_captcha_checkbox_exists(self) -> bool:
         """Verify captcha checkbox exists and is visible inside iframe"""
         try:
-            checkbox = self.get_captcha_checkbox()
+            # Use the method with exact iframe locator: page.locator("//iframe[@title='SmartCaptcha checkbox widget']")
+            checkbox = self.get_captcha_checkbox_by_iframe_title()
             if checkbox:
                 # Give more time for iframe content to load
                 return checkbox.is_visible(timeout=15000)

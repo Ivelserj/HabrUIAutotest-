@@ -254,11 +254,20 @@ class LoginPageSteps:
         results["social_buttons_block"] = {"visible": social_buttons_block_visible}
         
         if social_buttons_block_visible:
-            allure.attach(
-                self.login_page.social_buttons_block.screenshot(),
-                name="social_buttons_block",
-                attachment_type=allure.attachment_type.PNG
-            )
+            try:
+                # Use shorter timeout for screenshot to avoid long waits
+                allure.attach(
+                    self.login_page.social_buttons_block.screenshot(timeout=3000),
+                    name="social_buttons_block",
+                    attachment_type=allure.attachment_type.PNG
+                )
+            except Exception:
+                # If screenshot fails, attach a text message instead
+                allure.attach(
+                    "Social buttons block screenshot failed - element may not be stable",
+                    name="social_buttons_block_screenshot_failed",
+                    attachment_type=allure.attachment_type.TEXT
+                )
         else:
             allure.attach(
                 "Social buttons block 'div.socials-buttons' is not visible",
@@ -271,11 +280,20 @@ class LoginPageSteps:
         results["social_login_text"] = {"visible": social_text_visible}
         
         if social_text_visible:
-            allure.attach(
-                self.login_page.social_login_text.screenshot(),
-                name="social_login_text",
-                attachment_type=allure.attachment_type.PNG
-            )
+            try:
+                # Use shorter timeout for screenshot to avoid long waits
+                allure.attach(
+                    self.login_page.social_login_text.screenshot(timeout=3000),
+                    name="social_login_text",
+                    attachment_type=allure.attachment_type.PNG
+                )
+            except Exception:
+                # If screenshot fails, attach a text message instead
+                allure.attach(
+                    "Social login text screenshot failed - element may not be stable",
+                    name="social_login_text_screenshot_failed",
+                    attachment_type=allure.attachment_type.TEXT
+                )
         
         # Verify all social login buttons
         social_buttons = self.login_page.get_all_social_login_buttons()
@@ -292,27 +310,30 @@ class LoginPageSteps:
         }
         
         for button_name, button_locator in social_buttons.items():
+            count = 0
+            is_visible = False
+            is_clickable = False
             try:
+                # Use shorter timeout for count check to avoid long waits
                 count = button_locator.count()
                 if count > 0:
-                    is_visible = button_locator.first.is_visible(timeout=5000)
-                    is_clickable = button_locator.first.is_enabled() if is_visible else False
-                else:
-                    is_visible = False
-                    is_clickable = False
+                    is_visible = button_locator.first.is_visible(timeout=3000)
+                    if is_visible:
+                        is_clickable = button_locator.first.is_enabled()
             except Exception:
                 is_visible = False
                 is_clickable = False
             
-            # Verify icon for this button
+            # Verify icon for this button - only check if button is visible
             icon_name = button_to_icon_map.get(button_name, "")
             icon_visible = False
-            if icon_name and icon_name in social_icons:
+            if icon_name and icon_name in social_icons and is_visible:
                 try:
                     icon_locator = social_icons[icon_name]
+                    # Use shorter timeout for icon checks since they're nested
                     icon_count = icon_locator.count()
                     if icon_count > 0:
-                        icon_visible = icon_locator.first.is_visible(timeout=5000)
+                        icon_visible = icon_locator.first.is_visible(timeout=2000)
                 except Exception:
                     icon_visible = False
             
@@ -353,11 +374,20 @@ class LoginPageSteps:
         results["text_visible"] = text_visible
         
         if text_visible:
-            allure.attach(
-                self.login_page.registration_text.screenshot(),
-                name="registration_text",
-                attachment_type=allure.attachment_type.PNG
-            )
+            try:
+                # Use shorter timeout for screenshot to avoid long waits
+                allure.attach(
+                    self.login_page.registration_text.screenshot(timeout=3000),
+                    name="registration_text",
+                    attachment_type=allure.attachment_type.PNG
+                )
+            except Exception:
+                # If screenshot fails, attach a text message instead
+                allure.attach(
+                    "Registration text screenshot failed - element may not be stable",
+                    name="registration_text_screenshot_failed",
+                    attachment_type=allure.attachment_type.TEXT
+                )
         
         # Verify registration link
         link_visible = self.login_page.verify_registration_link_exists()
@@ -367,11 +397,20 @@ class LoginPageSteps:
         results["link_clickable"] = link_clickable
         
         if link_visible:
-            allure.attach(
-                self.login_page.registration_link.screenshot(),
-                name="registration_link",
-                attachment_type=allure.attachment_type.PNG
-            )
+            try:
+                # Use shorter timeout for screenshot to avoid long waits
+                allure.attach(
+                    self.login_page.registration_link.screenshot(timeout=3000),
+                    name="registration_link",
+                    attachment_type=allure.attachment_type.PNG
+                )
+            except Exception:
+                # If screenshot fails, attach a text message instead
+                allure.attach(
+                    "Registration link screenshot failed - element may not be stable",
+                    name="registration_link_screenshot_failed",
+                    attachment_type=allure.attachment_type.TEXT
+                )
         else:
             allure.attach(
                 "Registration link is not visible",
@@ -430,7 +469,9 @@ class LoginPageSteps:
         
         if checkbox_visible:
             try:
-                checkbox = self.login_page.get_captcha_checkbox()
+                # Use the method with exact iframe locator: page.locator("//iframe[@title='SmartCaptcha checkbox widget']")
+                # and find div with class 'CheckboxCaptcha-Anchor' inside the iframe
+                checkbox = self.login_page.get_captcha_checkbox_by_iframe_title()
                 if checkbox and checkbox.is_visible(timeout=2000):
                     allure.attach(
                         checkbox.screenshot(),
