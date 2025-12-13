@@ -6,6 +6,9 @@ from pages.main_page import MainPage
 from pages.login_page import LoginPage
 from playwright.sync_api import Page
 import allure
+import json
+import os
+from datetime import datetime
 
 
 class LoginPageSteps:
@@ -464,11 +467,41 @@ class LoginPageSteps:
         Returns:
             dict: Dictionary with captcha element names as keys and dict with 'visible' as values
         """
+        # #region agent log
+        try:
+            log_path = r"d:\documents\Test Projects\AI\HabrUIAutotest\.cursor\debug.log"
+            with open(log_path, "a", encoding="utf-8") as f:
+                f.write(json.dumps({
+                    "sessionId": "debug-session",
+                    "runId": "run1",
+                    "hypothesisId": "A",
+                    "location": "login_page_steps.py:459",
+                    "message": "verify_captcha_iframe_form entry",
+                    "data": {"timestamp": datetime.now().isoformat()},
+                    "timestamp": int(datetime.now().timestamp() * 1000)
+                }, ensure_ascii=False) + "\n")
+        except: pass
+        # #endregion
         results = {}
         
         # Verify captcha container
         container_visible = self.login_page.verify_captcha_container_exists()
         results["captcha_container"] = {"visible": container_visible}
+        # #region agent log
+        try:
+            log_path = r"d:\documents\Test Projects\AI\HabrUIAutotest\.cursor\debug.log"
+            with open(log_path, "a", encoding="utf-8") as f:
+                f.write(json.dumps({
+                    "sessionId": "debug-session",
+                    "runId": "run1",
+                    "hypothesisId": "A",
+                    "location": "login_page_steps.py:471",
+                    "message": "container_visible check",
+                    "data": {"container_visible": container_visible},
+                    "timestamp": int(datetime.now().timestamp() * 1000)
+                }, ensure_ascii=False) + "\n")
+        except: pass
+        # #endregion
         
         if container_visible:
             allure.attach(
@@ -486,18 +519,160 @@ class LoginPageSteps:
         # Verify captcha iframe
         iframe_exists = self.login_page.verify_captcha_iframe_exists()
         results["captcha_iframe"] = {"visible": iframe_exists}
+        # #region agent log
+        try:
+            log_path = r"d:\documents\Test Projects\AI\HabrUIAutotest\.cursor\debug.log"
+            with open(log_path, "a", encoding="utf-8") as f:
+                f.write(json.dumps({
+                    "sessionId": "debug-session",
+                    "runId": "run1",
+                    "hypothesisId": "A",
+                    "location": "login_page_steps.py:488",
+                    "message": "iframe_exists check",
+                    "data": {"iframe_exists": iframe_exists},
+                    "timestamp": int(datetime.now().timestamp() * 1000)
+                }, ensure_ascii=False) + "\n")
+        except: pass
+        # #endregion
         
         if iframe_exists:
             try:
                 iframe = self.login_page.captcha_iframe
-                if iframe.count() > 0:
+                iframe_count = iframe.count()
+                # #region agent log
+                try:
+                    log_path = r"d:\documents\Test Projects\AI\HabrUIAutotest\.cursor\debug.log"
+                    with open(log_path, "a", encoding="utf-8") as f:
+                        f.write(json.dumps({
+                            "sessionId": "debug-session",
+                            "runId": "run1",
+                            "hypothesisId": "C",
+                            "location": "login_page_steps.py:495",
+                            "message": "iframe count",
+                            "data": {"iframe_count": iframe_count},
+                            "timestamp": int(datetime.now().timestamp() * 1000)
+                        }, ensure_ascii=False) + "\n")
+                except: pass
+                # #endregion
+                if iframe_count > 0:
+                    # Wait for iframe to load
+                    try:
+                        self.login_page.page.wait_for_timeout(2000)  # Wait 2 seconds for iframe content to load
+                    except Exception:
+                        pass
                     allure.attach(
                         iframe.screenshot(),
                         name="captcha_iframe",
                         attachment_type=allure.attachment_type.PNG
                     )
+            except Exception as e:
+                # #region agent log
+                try:
+                    log_path = r"d:\documents\Test Projects\AI\HabrUIAutotest\.cursor\debug.log"
+                    with open(log_path, "a", encoding="utf-8") as f:
+                        f.write(json.dumps({
+                            "sessionId": "debug-session",
+                            "runId": "run1",
+                            "hypothesisId": "C",
+                            "location": "login_page_steps.py:508",
+                            "message": "iframe screenshot exception",
+                            "data": {"error": str(e)},
+                            "timestamp": int(datetime.now().timestamp() * 1000)
+                        }, ensure_ascii=False) + "\n")
+                except: pass
+                # #endregion
+                pass
+            
+            # Wait a bit more for iframe content to be fully loaded
+            try:
+                self.login_page.page.wait_for_timeout(1000)
             except Exception:
                 pass
+            
+            # Verify captcha title "Я не робот"
+            title_visible = self.login_page.verify_captcha_title_exists()
+            results["captcha_title"] = {"visible": title_visible}
+            # #region agent log
+            try:
+                log_path = r"d:\documents\Test Projects\AI\HabrUIAutotest\.cursor\debug.log"
+                with open(log_path, "a", encoding="utf-8") as f:
+                    f.write(json.dumps({
+                        "sessionId": "debug-session",
+                        "runId": "run1",
+                        "hypothesisId": "A",
+                        "location": "login_page_steps.py:523",
+                        "message": "title_visible result",
+                        "data": {"title_visible": title_visible},
+                        "timestamp": int(datetime.now().timestamp() * 1000)
+                    }, ensure_ascii=False) + "\n")
+            except: pass
+            # #endregion
+            
+            # Add debug info for title
+            if not title_visible:
+                try:
+                    # Try to get all text content from iframe for debugging
+                    all_text = self.login_page.captcha_frame_locator.locator('body').text_content(timeout=3000)
+                    # #region agent log
+                    try:
+                        log_path = r"d:\documents\Test Projects\AI\HabrUIAutotest\.cursor\debug.log"
+                        with open(log_path, "a", encoding="utf-8") as f:
+                            f.write(json.dumps({
+                                "sessionId": "debug-session",
+                                "runId": "run1",
+                                "hypothesisId": "B",
+                                "location": "login_page_steps.py:533",
+                                "message": "iframe body text content (steps)",
+                                "data": {"all_text": all_text[:500] if all_text else None},
+                                "timestamp": int(datetime.now().timestamp() * 1000)
+                            }, ensure_ascii=False) + "\n")
+                    except: pass
+                    # #endregion
+                    allure.attach(
+                        f"Captcha iframe text content: {all_text}",
+                        name="captcha_iframe_text_content",
+                        attachment_type=allure.attachment_type.TEXT
+                    )
+                except Exception as e:
+                    # #region agent log
+                    try:
+                        log_path = r"d:\documents\Test Projects\AI\HabrUIAutotest\.cursor\debug.log"
+                        with open(log_path, "a", encoding="utf-8") as f:
+                            f.write(json.dumps({
+                                "sessionId": "debug-session",
+                                "runId": "run1",
+                                "hypothesisId": "C",
+                                "location": "login_page_steps.py:545",
+                                "message": "get iframe text exception",
+                                "data": {"error": str(e)},
+                                "timestamp": int(datetime.now().timestamp() * 1000)
+                            }, ensure_ascii=False) + "\n")
+                    except: pass
+                    # #endregion
+                    pass
+            
+            # Verify captcha checkbox
+            checkbox_visible = self.login_page.verify_captcha_checkbox_exists()
+            results["captcha_checkbox"] = {"visible": checkbox_visible}
+            
+            # Verify captcha continue text "Нажмите, чтобы продолжить"
+            continue_text_visible = self.login_page.verify_captcha_continue_text_exists()
+            results["captcha_continue_text"] = {"visible": continue_text_visible}
         
+        # #region agent log
+        try:
+            log_path = r"d:\documents\Test Projects\AI\HabrUIAutotest\.cursor\debug.log"
+            with open(log_path, "a", encoding="utf-8") as f:
+                f.write(json.dumps({
+                    "sessionId": "debug-session",
+                    "runId": "run1",
+                    "hypothesisId": "A",
+                    "location": "login_page_steps.py:558",
+                    "message": "verify_captcha_iframe_form exit",
+                    "data": {"results": results},
+                    "timestamp": int(datetime.now().timestamp() * 1000)
+                }, ensure_ascii=False) + "\n")
+        except: pass
+        # #endregion
         return results
 

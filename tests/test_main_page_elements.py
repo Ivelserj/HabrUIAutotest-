@@ -837,7 +837,7 @@ class TestAuthorizationButtonFunctionality:
                 attachment_type=allure.attachment_type.TEXT
             )
         
-        # Step 7: Verify captcha iframe form is displayed
+            # Step 7: Verify captcha iframe form is displayed
         with allure.step("Step 7: Verify captcha iframe form ('я не робот') is displayed"):
             captcha_results = login_page_steps.verify_captcha_iframe_form()
             
@@ -853,9 +853,30 @@ class TestAuthorizationButtonFunctionality:
                 "Captcha iframe should be present"
             )
             
+            # Verify captcha title "Я не робот"
+            captcha_title_results = captcha_results.get("captcha_title", {})
+            assert captcha_title_results.get("visible", False), (
+                "Captcha title 'Я не робот' should be present and visible inside iframe"
+            )
+            
+            # Verify captcha checkbox
+            captcha_checkbox_results = captcha_results.get("captcha_checkbox", {})
+            assert captcha_checkbox_results.get("visible", False), (
+                "Captcha checkbox should be present and visible inside iframe"
+            )
+            
+            # Verify captcha continue text "Нажмите, чтобы продолжить"
+            captcha_continue_text_results = captcha_results.get("captcha_continue_text", {})
+            assert captcha_continue_text_results.get("visible", False), (
+                "Captcha continue text 'Нажмите, чтобы продолжить' should be present and visible inside iframe"
+            )
+            
             captcha_status = (
                 f"Captcha container: visible={captcha_container_results.get('visible', False)}\n"
-                f"Captcha iframe: visible={captcha_iframe_results.get('visible', False)}"
+                f"Captcha iframe: visible={captcha_iframe_results.get('visible', False)}\n"
+                f"Captcha title 'Я не робот': visible={captcha_title_results.get('visible', False)}\n"
+                f"Captcha checkbox: visible={captcha_checkbox_results.get('visible', False)}\n"
+                f"Captcha continue text 'Нажмите, чтобы продолжить': visible={captcha_continue_text_results.get('visible', False)}"
             )
             
             allure.attach(
