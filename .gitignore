@@ -19,6 +19,11 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+*.pyc
+*.pyo
+*.pyd
+*.manifest
+*.spec
 
 # Virtual environments
 venv/
@@ -32,15 +37,21 @@ ENV/
 *.swp
 *.swo
 *~
+# IDE configuration files (may contain local paths)
+.vscode/settings.json
+.idea/workspace.xml
+.idea/tasks.xml
+*.code-workspace
 
 # Testing
 .pytest_cache/
 .coverage
+.coverage.*
 htmlcov/
 .tox/
 .hypothesis/
 
-# Reports
+# Reports (may contain local paths in file paths or metadata)
 reports/
 *.html
 *.xml
@@ -54,11 +65,27 @@ allure-report/
 playwright-report/
 test-results/
 
+# Logs and temporary files (may contain local paths)
+*.log
+*.tmp
+*.temp
+*.bak
+
+# Screenshots and test artifacts (may contain paths in metadata)
+screenshots/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+!**/favicon.ico
+
 # Environment
 .env
 .env.local
+.env.*.local
 
 # OS
 .DS_Store
 Thumbs.db
-
+desktop.ini
