@@ -1,0 +1,48 @@
+---
+alwaysApply: true
+---
+
+# General File Editing Rules
+
+## Handling Uneditable Files
+
+If you cannot edit a file (for example, a rules file, protected file, or file that cannot be found/accessed):
+1. **Create a temporary file** with the result/content you intended to write
+2. **Notify in chat** that you cannot edit/find the file
+3. **Inform** that you have created a temporary file with the result
+4. **Specify the path** to the temporary file so the user can review and manually apply changes
+
+### Temporary File Naming Convention
+- **IMPORTANT**: The temporary file name must have a **correct and meaningful name** that reflects the intended destination, so the user can easily copy it to the correct folder where you don't have access
+- Format: `[original-filename]-temp.[extension]` (e.g., `file-editing-temp.mdc`, `some-rule-temp.mdc`)
+- Store in the project root or same directory as the original file
+- Include a header comment explaining why the temporary file was created
+- The name should clearly indicate what the file is and where it should be placed
+
+### Example Scenario
+If you cannot edit `.cursor/rules/some-rule.mdc`:
+- Create: `some-rule-temp.mdc` or `some-rule-temp-20241201.mdc`
+- Write in chat: "I cannot edit the file `.cursor/rules/some-rule.mdc`. I have created a temporary file `some-rule-temp.mdc` with the updated content. Please review and manually apply the changes."
+
+### Creating Cursor Rules Files
+
+**If the user asks you to create a rule file:**
+- The temporary file name (with "-temp" suffix) and the file content must **fully comply with Cursor Rules requirements**:
+  - Must have proper frontmatter with `alwaysApply: true` (or appropriate settings)
+  - Must use `.mdc` extension for rule files
+  - Must follow Cursor Rules file format and structure
+  - The file should be ready to be copied directly to `.cursor/rules/` directory
+  - Only the "-temp" suffix distinguishes it from the final file name
+
+**Example for creating a rule:**
+- User requests: "Create a rule file named `my-rule.mdc`"
+- If you cannot create it in `.cursor/rules/`, create: `my-rule-temp.mdc` in project root
+- The file must have complete frontmatter: `---\nalwaysApply: true\n---`
+- The file must be a valid Cursor Rules file that can be directly copied to `.cursor/rules/my-rule.mdc`
+
+### When to Use This Rule
+- File is read-only or protected
+- File cannot be found or accessed
+- Permission denied errors
+- File is locked by another process
+- Any other situation where direct editing is not possible

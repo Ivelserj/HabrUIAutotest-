@@ -1,9 +1,7 @@
 """
 Page Object Model for Habr.com main page
 """
-import re
 from playwright.sync_api import Page, Locator
-from typing import List
 
 
 class MainPage:
@@ -143,29 +141,6 @@ class MainPage:
         """Verify logo link exists and is visible"""
         return self.logo_link.is_visible()
     
-    def verify_all_content_tabs_exist(self) -> bool:
-        """Verify all content tabs exist and are visible"""
-        tabs = [
-            self.articles_tab,
-            self.posts_tab,
-            self.news_tab,
-            self.hubs_tab,
-            self.authors_tab,
-            self.companies_tab
-        ]
-        return all(tab.is_visible() for tab in tabs)
-    
-    def verify_header_elements_exist(self) -> bool:
-        """Verify all header elements exist and are visible"""
-        elements = [
-            self.all_streams_link,
-            self.search_link,
-            self.write_publication_link,
-            self.settings_button,
-            self.login_button
-        ]
-        return all(element.is_visible() for element in elements)
-    
     def verify_main_content_area_exists(self) -> bool:
         """Verify main content area exists and is visible"""
         return self.main_content_area.first.is_visible()
@@ -173,17 +148,6 @@ class MainPage:
     def verify_footer_section_exists(self) -> bool:
         """Verify footer section exists and is visible"""
         return self.footer_section.first.is_visible()
-    
-    def get_all_content_tabs(self) -> List[Locator]:
-        """Get list of all content tab locators"""
-        return [
-            self.articles_tab,
-            self.posts_tab,
-            self.news_tab,
-            self.hubs_tab,
-            self.authors_tab,
-            self.companies_tab
-        ]
     
     # Menu elements
     @property

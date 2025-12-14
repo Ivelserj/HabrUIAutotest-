@@ -1,0 +1,549 @@
+---
+alwaysApply: true
+---
+
+# Cursor Rules for SVG Mockup Generation and UI/UX Design
+
+## SVG File Creation Rules
+
+### XML/SVG Encoding and Comments
+- **ALWAYS** use only ASCII characters (0x00-0x7F) in XML comments
+- **NEVER** use non-ASCII characters (Cyrillic, special symbols, emoji) in XML comments
+- Use English language for all XML/SVG comments
+- Format: `<!-- English comment text -->`
+- Validate XML syntax before saving files
+
+### SVG Structure Best Practices
+- Include proper XML declaration: `<?xml version="1.0" encoding="UTF-8"?>`
+- Define reusable elements in `<defs>` section (gradients, filters, patterns)
+- Use semantic IDs for all major elements (e.g., `id="leftSidebar"`, `id="topHeader"`)
+- Group related elements using `<g>` tags with descriptive IDs
+- Add layout guides for Figma with low opacity (opacity="0.1") for alignment
+
+### Color and Styling
+- Use hex color codes for consistency (#RRGGBB format)
+- Define color palettes in README documentation
+- Use gradients for backgrounds when appropriate
+- Apply shadows/filters through SVG `<filter>` definitions
+
+### File Organization
+- Create corresponding README.md file for each mockup
+- Include:
+  - Description of the mockup
+  - File structure
+  - Usage instructions for Figma
+  - Color palette
+  - Dimensions and spacing
+  - Typography guidelines
+  - Component breakdown
+
+## Error Prevention
+
+### Before Saving SVG Files
+1. Check all comments contain only ASCII characters
+2. Validate XML syntax
+3. Ensure all opening tags have closing tags
+4. Verify all attribute values are properly quoted
+5. Test file opens correctly in browser
+
+### Common Issues to Avoid
+- ❌ Non-ASCII characters in comments (causes XML parsing errors)
+- ❌ Unclosed tags
+- ❌ Unquoted attribute values
+- ❌ Invalid XML entities
+- ❌ Missing namespace declarations
+
+## Prompt Generation Guidelines
+
+When generating prompts for SVG mockup creation:
+
+1. **Specify Structure**: Always request clear component breakdown (header, sidebar, main content, footer)
+2. **Request Complete Element Coverage**: Emphasize that ALL elements must be included:
+   - All navigation elements
+   - All buttons and interactive elements
+   - All icons (navigation, action, status, decorative)
+   - All images and logos
+   - All text content (no placeholders)
+   - All form elements
+   - All decorative elements
+3. **Request Icon Handling**: Specify that all icons must be included and correctly positioned
+4. **Request Accuracy**: Emphasize exact matching of colors, typography, spacing, and positioning
+5. **Request Validation**: Ask for XML validation and browser testing
+6. **Include Documentation**: Request README file with usage instructions, icon inventory, and image list
+7. **Specify Encoding**: Emphasize ASCII-only comments
+8. **Request Error Checking**: Ask to verify file opens in browser without errors
+9. **Request Verification**: Ask to verify all elements match original page exactly
+
+## Example Prompt Template
+
+Create an SVG mockup for [PAGE_NAME] with:
+- ASCII-only English comments in XML
+- Proper XML structure with defs section
+- Semantic element IDs for all major elements
+- Layout guides for Figma
+- ALL page elements included (navigation, buttons, forms, text, images, icons)
+- ALL icons included and correctly positioned
+- ALL images included and properly sized
+- ALL text content matching original (no placeholders)
+- Exact color matching using color picker values
+- Exact typography matching (font family, size, weight, line height)
+- Exact spacing and positioning matching original
+- Corresponding README.md with:
+  - Color palette with hex codes
+  - Dimensions and spacing measurements
+  - Complete component breakdown
+  - Icon inventory and locations
+  - Image list and sources
+  - Typography guidelines
+  - Usage instructions for Figma
+- Validate XML syntax before completion
+- Test that file opens in browser without errors
+- Verify all elements match original page exactly
+
+## Advanced SVG Features
+
+### Gradients
+- Define in `<defs>` section with unique IDs
+- Use `linearGradient` for horizontal/vertical gradients
+- Use `radialGradient` for circular/radial effects
+- Reference gradients with `fill="url(#gradientId)"` or `stroke="url(#gradientId)"`
+
+### Filters and Effects
+- Create `<filter>` elements in `<defs>` section
+- Common filters: shadows (`feGaussianBlur`, `feOffset`), glows
+- Apply with `filter="url(#filterId)"` attribute
+
+### Patterns
+- Define `<pattern>` elements for repeating backgrounds
+- Useful for grid patterns, textures
+- Reference with `fill="url(#patternId)"`
+
+## Figma Integration Details
+
+### Import Process
+1. **Direct SVG Import**: File → Import → Select SVG file
+2. **Using Screenshot**: Import screenshot as reference, create vector elements on top
+3. **Component Creation**: Break down SVG into reusable Figma components
+
+### Component Structure for Figma
+- Create Frame for each major section
+- Use Auto Layout for flexible components
+- Define Component variants for different states
+- Set up Color Styles and Text Styles
+- Configure Constraints for responsiveness
+
+### Layout Guides
+- Include in SVG with `opacity="0.1"` for visibility
+- Use dashed lines: `stroke-dasharray="5,5"`
+- Vertical guides for column boundaries
+- Horizontal guides for section boundaries
+- Can be hidden/removed after import to Figma
+
+## README Documentation Template
+
+Each mockup README should include:
+
+1. **Description**: What page/interface is being mocked
+2. **Files**: List of SVG and reference files
+3. **Figma Usage**: Step-by-step import instructions
+4. **Color Palette**: 
+   - Main colors with hex codes
+   - Accent colors
+   - Background colors
+   - Text colors
+5. **Dimensions**:
+   - Page width/height
+   - Component sizes
+   - Spacing and padding
+   - Border radius values
+6. **Typography**:
+   - Font families
+   - Font sizes for different elements
+   - Font weights
+   - Line heights
+7. **Components**:
+   - List of all UI components
+   - Component states (default, hover, active, disabled)
+   - Interactive elements
+8. **Icons**:
+   - Complete icon inventory
+   - Icon locations and descriptions
+   - Icon sizes and colors
+   - Icon states (if applicable)
+9. **Images**:
+   - List of all images included
+   - Image sources and file names
+   - Image dimensions
+   - Image locations in mockup
+10. **Grid System**: Layout structure and breakpoints
+11. **Element Inventory**: Complete list of all elements included in mockup
+12. **Accuracy Verification**: Notes on how mockup matches original page
+13. **Next Steps**: Recommendations for Figma implementation
+
+## Quality Checklist
+
+Before considering a mockup complete:
+
+### Technical Validation
+- [ ] All XML comments use ASCII characters only
+- [ ] XML file validates without errors (test with XML parser)
+- [ ] File opens correctly in browser (test in Chrome/Firefox)
+- [ ] All SVG elements are properly closed
+- [ ] All gradients, filters, and patterns are properly defined
+- [ ] Semantic IDs are used for all major elements
+- [ ] File follows naming convention: `[page-name]-mockup.svg`
+
+### Content Completeness
+- [ ] All page sections are included (header, main, sidebar, footer)
+- [ ] All navigation elements are present and correctly positioned
+- [ ] All buttons are included with correct labels
+- [ ] All links are represented
+- [ ] All form elements are included
+- [ ] All text content matches original (no placeholder text)
+- [ ] All headings (H1-H6) are present
+- [ ] All icons are included and correctly positioned
+- [ ] All images are included and properly sized
+- [ ] All logos and branding elements are present
+- [ ] All decorative elements are included
+
+### Visual Accuracy
+- [ ] Colors match original page exactly
+- [ ] Typography matches original (font family, size, weight, line height)
+- [ ] Spacing and padding match original measurements
+- [ ] Border radius values match original
+- [ ] Shadow effects match original
+- [ ] Gradients match original direction and colors
+- [ ] Element positions match original layout
+- [ ] Icon sizes and colors match original
+- [ ] Image dimensions and aspect ratios are correct
+
+### Documentation
+- [ ] Screenshot/reference image is saved and documented
+- [ ] README.md file is created with full documentation
+- [ ] Color palette is documented with hex codes
+- [ ] Dimensions and spacing are specified
+- [ ] Component breakdown is provided
+- [ ] Typography guidelines are included
+- [ ] All icons are documented with descriptions
+- [ ] All images are listed with sources
+- [ ] Layout guides are present (can be hidden)
+
+### Element Verification
+- [ ] Element count matches original page
+- [ ] No elements are missing
+- [ ] No extra elements were added
+- [ ] All interactive elements are represented
+- [ ] All states are documented (hover, active, disabled)
+
+## Troubleshooting
+
+### Common Errors and Solutions
+
+**Error: "xmlParseComment: invalid xmlChar value"**
+- **Cause**: Non-ASCII characters in XML comments
+- **Solution**: Replace all comments with ASCII-only English text
+- **Prevention**: Always use English for XML comments
+
+**Error: "File doesn't open in browser"**
+- **Cause**: Invalid XML syntax or encoding issues
+- **Solution**: Validate XML, check encoding is UTF-8, ensure all tags are closed
+- **Prevention**: Test file immediately after creation
+
+**Issue: "Colors don't match original"**
+- **Cause**: Incorrect color extraction or approximation
+- **Solution**: Use color picker from screenshot, verify hex codes
+- **Prevention**: Document color source in README
+
+**Issue: "Components not aligned in Figma"**
+- **Cause**: Missing or incorrect layout guides
+- **Solution**: Add/verify layout guides with proper coordinates
+- **Prevention**: Include layout guides from the start
+
+## Browser Integration Workflow
+
+### Getting Page Information
+1. **Initial Setup**
+   - Use browser snapshot tools to capture page structure
+   - Take full-page screenshots for reference at original resolution
+   - Save screenshots in `.playwright-mcp/` directory with descriptive names
+   - Ensure page is fully loaded before capturing
+
+2. **Comprehensive Page Analysis**
+   - Identify main sections (header, sidebar, content, footer)
+   - Note color schemes and gradients
+   - Document typography and spacing
+   - List all interactive elements
+   - Capture all icons and their locations
+   - Document all images and their sources
+   - Extract all text content
+   - Note all form elements and their states
+
+3. **Element-by-Element Capture**
+   - Use browser DevTools to inspect each element
+   - Extract computed styles for each element
+   - Capture element dimensions and positions
+   - Document element hierarchy and nesting
+   - Note any dynamic content or states
+
+### Screenshot Naming Convention
+- Format: `[page-name]-screenshot.png` or `[page-name]-reference.png`
+- Store in `.playwright-mcp/` directory
+- Reference screenshots in README documentation
+
+## Comprehensive Page Analysis Process
+
+### Step-by-Step Page Capture
+1. **Initial Page Load**
+   - Navigate to target page
+   - Wait for all resources to load (images, fonts, scripts)
+   - Scroll through entire page to trigger lazy-loaded content
+   - Capture full-page screenshot for reference
+
+2. **Element Inventory**
+   - Create complete list of all visible elements:
+     - Navigation menus and items
+     - Buttons (all states: default, hover, active, disabled)
+     - Form inputs (text fields, dropdowns, checkboxes, radio buttons)
+     - Links and anchors
+     - Headings (H1-H6)
+     - Paragraphs and text blocks
+     - Images and graphics
+     - Icons (navigation, action, status, decorative)
+     - Logos and branding elements
+     - Badges, labels, tags
+     - Cards and containers
+     - Tables and data grids
+     - Modals and overlays
+     - Tooltips and popovers
+     - Breadcrumbs
+     - Pagination elements
+     - Footer content
+
+3. **Layout Analysis**
+   - Document exact positioning of all elements
+   - Measure spacing between elements (margins, padding)
+   - Identify grid system and column structure
+   - Note responsive breakpoints if visible
+   - Capture z-index layering for overlapping elements
+
+4. **Visual Details Capture**
+   - Extract exact colors using color picker tool
+   - Document all font families, sizes, weights, line heights
+   - Measure border radius values
+   - Capture shadow effects (offset, blur, color, spread)
+   - Document gradient directions and color stops
+   - Note opacity values for semi-transparent elements
+
+## Icons and Images Handling
+
+### Icon Extraction and Integration
+1. **Icon Identification**
+   - List all icons on the page (navigation, buttons, status indicators, decorative)
+   - Document icon sizes and positions
+   - Note icon colors and states (default, hover, active)
+   - Identify icon libraries used (if detectable)
+
+2. **Icon Representation in SVG**
+   - **Option 1: Vector Paths**: Convert icons to SVG paths using `<path>` elements
+   - **Option 2: Embedded SVG**: Include original SVG icons as `<svg>` elements within main SVG
+   - **Option 3: Symbol References**: Define icons in `<defs>` section and reference with `<use>` elements
+   - **Option 4: Base64 Encoding**: For complex icons, embed as base64-encoded data URIs
+   - Always maintain original icon dimensions and aspect ratios
+   - Preserve icon colors exactly as on original page
+
+3. **Icon Organization**
+   - Group related icons in `<g>` elements with semantic IDs (e.g., `id="navigationIcons"`)
+   - Store icon definitions in `<defs>` section for reusability
+   - Document all icons in README with descriptions and locations
+
+### Image and Logo Handling
+1. **Image Capture**
+   - Extract all images from page (photos, illustrations, graphics)
+   - Save original images separately in `.playwright-mcp/images/` directory
+   - Document image dimensions, file formats, and file sizes
+
+2. **Image Integration in SVG**
+   - Embed images using `<image>` elements with `href` attribute
+   - Use absolute or relative paths to image files
+   - Alternative: Embed as base64-encoded data URIs for self-contained SVG
+   - Maintain original aspect ratios
+   - Preserve image positioning and sizing exactly
+
+3. **Logo Treatment**
+   - Capture logos at highest available resolution
+   - Convert to SVG paths if possible for scalability
+   - If raster format, ensure high DPI version is used
+   - Document logo colors and any brand guidelines
+
+## Text Content Capture
+
+### Text Extraction Requirements
+1. **Complete Text Inventory**
+   - Extract ALL visible text from page (no placeholder text)
+   - Include navigation labels, button text, headings, body copy
+   - Capture tooltip text and alt text descriptions
+   - Document form labels and placeholder text
+   - Note any dynamic or generated text
+
+2. **Text Styling Preservation**
+   - Document exact font family for each text element
+   - Capture font size, weight, line height, letter spacing
+   - Preserve text colors and any text effects (shadows, gradients)
+   - Note text alignment (left, center, right, justify)
+   - Document text transforms (uppercase, lowercase, capitalize)
+
+3. **Text in SVG**
+   - Use `<text>` elements for all text content
+   - Apply exact font styling using CSS or inline styles
+   - Position text elements precisely to match original
+   - Group related text in `<g>` elements
+   - Use `<tspan>` for multi-line text blocks
+
+## Mockup Accuracy Validation
+
+### Pre-Creation Checklist
+Before starting mockup creation, ensure you have:
+- [ ] Full-page screenshot at original resolution
+- [ ] Complete element inventory list
+- [ ] All color values extracted and documented
+- [ ] All typography details captured
+- [ ] All icons identified and documented
+- [ ] All images saved separately
+- [ ] Spacing measurements documented
+- [ ] Layout structure analyzed
+
+### During Creation Validation
+While creating the mockup:
+- [ ] Compare each element with screenshot side-by-side
+- [ ] Verify exact positioning using coordinates
+- [ ] Check color accuracy using color picker comparison
+- [ ] Validate typography matches original
+- [ ] Ensure all icons are included and correctly positioned
+- [ ] Verify all images are included and properly sized
+- [ ] Check spacing matches original measurements
+- [ ] Validate all text content is present and correct
+
+### Post-Creation Verification
+After mockup completion:
+1. **Visual Comparison**
+   - Overlay mockup on original screenshot (if possible)
+   - Compare element by element
+   - Check for missing elements
+   - Verify no extra elements were added
+
+2. **Element Count Verification**
+   - Count all buttons, links, icons, images in original
+   - Count same elements in mockup
+   - Ensure numbers match exactly
+
+3. **Dimension Verification**
+   - Measure key elements in both original and mockup
+   - Verify widths, heights, spacing match
+   - Check border radius values
+   - Validate font sizes
+
+4. **Color Accuracy Check**
+   - Use color picker on original page elements
+   - Compare with colors in mockup
+   - Verify gradients match
+   - Check shadow colors and opacity
+
+5. **Final Checklist**
+   - [ ] All page sections are included (header, main, sidebar, footer)
+   - [ ] All navigation elements are present
+   - [ ] All buttons and interactive elements are included
+   - [ ] All icons are present and correctly positioned
+   - [ ] All images are included and properly sized
+   - [ ] All text content matches original
+   - [ ] All form elements are represented
+   - [ ] All decorative elements are included
+   - [ ] Layout structure matches original
+   - [ ] Spacing and padding are accurate
+   - [ ] Colors match original page
+   - [ ] Typography matches original
+   - [ ] No elements are missing
+   - [ ] No elements are incorrectly positioned
+
+## Enhanced Element Checklist
+
+### Required Elements to Include
+- [ ] **Navigation**
+  - [ ] Main navigation menu
+  - [ ] Secondary navigation (if present)
+  - [ ] Breadcrumbs
+  - [ ] Pagination controls
+  - [ ] Footer navigation links
+
+- [ ] **Interactive Elements**
+  - [ ] All buttons (primary, secondary, tertiary, icon buttons)
+  - [ ] All links (text links, image links, button-style links)
+  - [ ] Form inputs (text fields, textareas, selects, checkboxes, radio buttons)
+  - [ ] Dropdown menus
+  - [ ] Tabs
+  - [ ] Accordions
+  - [ ] Modals and dialogs
+  - [ ] Tooltips
+
+- [ ] **Icons**
+  - [ ] Navigation icons
+  - [ ] Action icons (edit, delete, add, etc.)
+  - [ ] Status icons (success, error, warning, info)
+  - [ ] Social media icons
+  - [ ] Decorative icons
+  - [ ] Icon buttons
+
+- [ ] **Images**
+  - [ ] Hero images
+  - [ ] Product/service images
+  - [ ] Avatar images
+  - [ ] Background images
+  - [ ] Decorative graphics
+  - [ ] Logos and branding
+
+- [ ] **Text Content**
+  - [ ] Page title (H1)
+  - [ ] All headings (H2-H6)
+  - [ ] Body paragraphs
+  - [ ] List items
+  - [ ] Button labels
+  - [ ] Form labels
+  - [ ] Error messages
+  - [ ] Help text
+  - [ ] Footer text
+
+- [ ] **Layout Elements**
+  - [ ] Header section
+  - [ ] Main content area
+  - [ ] Sidebar (if present)
+  - [ ] Footer section
+  - [ ] Cards and containers
+  - [ ] Grid layouts
+  - [ ] Columns
+
+- [ ] **UI Components**
+  - [ ] Badges and labels
+  - [ ] Alerts and notifications
+  - [ ] Progress bars
+  - [ ] Loading indicators
+  - [ ] Tables
+  - [ ] Lists (ordered, unordered)
+  - [ ] Blockquotes
+
+## Fixing Encoding Issues
+
+### If XML Parsing Errors Occur
+1. **Check for non-ASCII characters**: Use grep or search to find problematic comments
+2. **Replace all non-ASCII comments**: Convert to English ASCII-only comments
+3. **Validate XML**: Use XML parser or browser to test
+4. **PowerShell command for bulk fix** (if needed):
+
+```powershell
+$content = [System.IO.File]::ReadAllText('file.svg', [System.Text.Encoding]::UTF8)
+$lines = $content -split "`r?`n"
+for ($i = 0; $i -lt $lines.Length; $i++) {
+    if ($lines[$i] -match '<!--.*[^\x20-\x7E\x09].*-->') {
+        $lines[$i] = $lines[$i] -replace '<!--.*[^\x20-\x7E\x09].*-->', '<!-- English comment -->'
+    }
+}
+[System.IO.File]::WriteAllText('mockup_file.svg', ($lines -join "`r`n"), [System.Text.Encoding]::UTF8)
+```

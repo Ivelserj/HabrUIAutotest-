@@ -1,0 +1,1 @@
+Analyze all changes in the current branch and make a commit with a precise description of what I did. (In english)
