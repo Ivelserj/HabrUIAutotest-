@@ -9,11 +9,15 @@ This project is designed for automated UI testing of the Habr.com website. The p
 ### Key Features:
 
 - ✅ Automated UI testing of Habr.com main page elements
+- ✅ Login modal/window testing and verification
+- ✅ Main menu functionality testing
+- ✅ Footer functionality testing
 - ✅ HTML test plan generation from text file
 - ✅ Detailed Allure reports generation with screenshots and steps
 - ✅ Pytest HTML reports generation
 - ✅ Page Object Model (POM) architecture
 - ✅ Allure support for detailed reporting
+- ✅ Explicit waits only (no hardcoded sleeps or implicit waits)
 
 ## 🏗️ Project Structure
 
@@ -21,13 +25,15 @@ This project is designed for automated UI testing of the Habr.com website. The p
 HabrUIAutotest/
 ├── pages/                    # Page Object Model - page descriptions
 │   ├── __init__.py
-│   └── main_page.py          # Habr.com main page
+│   ├── main_page.py          # Habr.com main page
+│   └── login_page.py         # Habr.com login modal/page
 ├── steps/                    # Test steps (business logic + Allure)
 │   ├── __init__.py
-│   └── main_page_steps.py   # Steps for main page
+│   ├── main_page_steps.py    # Steps for main page
+│   └── login_page_steps.py   # Steps for login page
 ├── tests/                    # Tests
 │   ├── __init__.py
-│   └── test_main_page_elements.py  # Main page elements tests
+│   └── test_main_page_elements.py  # Main page and login tests
 ├── reports/                  # Reports
 │   ├── allure-results/       # Allure results
 │   ├── allure-report/        # Generated Allure report
@@ -116,9 +122,24 @@ This will create `test_plan.html` file and automatically open it in the browser.
 pytest
 ```
 
-#### Run specific test:
+#### Run specific test file:
 ```bash
 pytest tests/test_main_page_elements.py
+```
+
+#### Run specific test class:
+```bash
+# Main page elements test
+pytest tests/test_main_page_elements.py::TestMainPageElements
+
+# Main menu functionality test
+pytest tests/test_main_page_elements.py::TestMainMenuFunctionality
+
+# Footer functionality test
+pytest tests/test_main_page_elements.py::TestFooterFunctionality
+
+# Authorization button functionality test
+pytest tests/test_main_page_elements.py::TestAuthorizationButtonFunctionality
 ```
 
 #### Run with markers:
@@ -205,16 +226,32 @@ Playwright API          # Low-level operations
    - Page element descriptions
    - Basic operations (navigation, element search)
    - Element locators
+   - **main_page.py**: Main page elements (header, menu, footer, content tabs)
+   - **login_page.py**: Login modal elements (form fields, buttons, social login, captcha)
 
 2. **Steps** (`steps/`) - Test steps
    - Combination of actions from Page Objects
    - Allure integration (screenshots, steps)
    - Validations and checks
+   - **main_page_steps.py**: Steps for main page interactions
+   - **login_page_steps.py**: Steps for login modal interactions
 
 3. **Tests** (`tests/`) - Tests
    - Test scenarios
    - Assertions
    - Allure annotations
+   - **test_main_page_elements.py**: Contains 4 test classes:
+     - `TestMainPageElements`: Main page elements verification
+     - `TestMainMenuFunctionality`: Main menu open/close and options verification
+     - `TestFooterFunctionality`: Footer elements and links verification
+     - `TestAuthorizationButtonFunctionality`: Login modal opening and elements verification
+
+### Best Practices:
+
+- ✅ **Explicit waits only**: No `time.sleep()`, `wait_for_timeout()`, or hardcoded timeout values
+- ✅ **Playwright auto-waiting**: Leverages Playwright's built-in waiting mechanisms
+- ✅ **Element state waits**: Uses `wait_for(state="visible")` for explicit element state checks
+- ✅ **No implicit waits**: Avoids `implicitly_wait()` or similar mechanisms
 
 ## 📊 Reporting
 
@@ -283,17 +320,45 @@ class NewPage:
     @property
     def element(self):
         return self.page.locator("selector")
+    
+    def verify_element_exists(self) -> bool:
+        try:
+            return self.element.is_visible()  # Uses Playwright auto-waiting
+        except Exception:
+            return False
 
 # steps/new_page_steps.py
 class NewPageSteps:
+    def __init__(self, page):
+        self.page = page
+        self.new_page = NewPage(page)
+    
     @allure.step("Do something")
     def do_something(self):
+        # Wait explicitly for element state, not hardcoded timeout
+        self.new_page.element.wait_for(state="visible")
         # Step logic
         pass
 
 # tests/test_new_page.py
 def test_new_feature(new_page_steps: NewPageSteps):
     new_page_steps.do_something()
+```
+
+### Important: Wait Strategy
+
+**❌ DON'T:**
+```python
+time.sleep(5)  # Never use sleep
+page.wait_for_timeout(500)  # Never use wait_for_timeout
+element.is_visible(timeout=5000)  # Avoid hardcoded timeouts
+```
+
+**✅ DO:**
+```python
+element.wait_for(state="visible")  # Explicit state wait
+element.is_visible()  # Uses Playwright default timeout
+page.wait_for_load_state("networkidle")  # Explicit load state wait
 ```
 
 ## 📦 Dependencies
@@ -304,8 +369,11 @@ Main project dependencies:
 - **pytest** (7.4.3) - Testing framework
 - **pytest-playwright** (0.4.3) - Playwright integration with pytest
 - **pytest-html** (4.1.1) - HTML reports
+- **pytest-xdist** (3.5.0) - Parallel test execution
 - **allure-pytest** (2.13.2) - Allure integration
 - **python-dotenv** (1.0.0) - Working with .env files
+
+See `requirements.txt` for exact versions.
 
 ## 🐛 Troubleshooting
 
@@ -323,8 +391,9 @@ python -m http.server 8080
 
 **Solution:** Check:
 - Internet speed
-- Timeout settings in `pages/main_page.py`
 - Habr.com website availability
+- Playwright uses explicit waits by default - no hardcoded timeouts needed
+- If needed, adjust timeout in `wait_for()` calls, but avoid hardcoded `timeout=` values
 
 ### Issue: Browser doesn't start
 
